@@ -23,6 +23,10 @@ public class Page extends Component {
 //        log.info("Logging");
     }
 
+    public void addAttachment(Attachment attachment){
+        attachments.add(attachment);
+    }
+
     public void delete(){
         System.out.println("Deleting Page");
     }
