@@ -1,0 +1,34 @@
+package com.proofpoint.wikisystem.service;
+
+import com.proofpoint.wikisystem.entities.User;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Service;
+
+import java.util.HashMap;
+import java.util.Map;
+
+@Service @Slf4j
+public class UserService {
+
+    private Map<String, User> users = new HashMap<>();
+
+    public void create(String ID, String username){
+        log.info("Creating user with userID:"+ID);
+        User user = User.Builder
+                .newInstance()
+                .withID(ID)
+                .withUsername(username)
+                .build();
+        log.info("User created:"+user.toString());
+        users.put(ID, user);
+
+    }
+
+    public User read(String userID){
+        if(users.containsKey(userID)){
+            return users.get(userID);
+        }else{
+            return null;
+        }
+    }
+}

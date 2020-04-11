@@ -6,6 +6,7 @@ import com.proofpoint.wikisystem.payload.CreatePageArgs;
 import com.proofpoint.wikisystem.entities.Page;
 import com.proofpoint.wikisystem.service.AttachmentService;
 import com.proofpoint.wikisystem.service.PageService;
+import com.proofpoint.wikisystem.service.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -21,10 +22,13 @@ public class WikiSystemController {
     @Autowired
     private AttachmentService attachmentService;
 
+    /*@Autowired
+    private UserService userService;*/
+
     @RequestMapping(value = "/createpage",
             method = RequestMethod.POST,
             consumes = "application/json")
-    public String create(@RequestBody final CreatePageArgs payload) {
+    public String createPage(@RequestBody final CreatePageArgs payload) {
 
         try {
             log.info("Received request to create page");
@@ -41,7 +45,7 @@ public class WikiSystemController {
     @RequestMapping(value = "/readpage",
             method = RequestMethod.GET,
             produces = "application/json")
-    public Page read(@RequestParam String pageId) {
+    public Page readPage(@RequestParam String pageId) {
         log.info("Received request to read page");
         return pageService.readPage(pageId);
     }
@@ -49,7 +53,7 @@ public class WikiSystemController {
     @RequestMapping(value = "/createfile",
             method = RequestMethod.POST,
             consumes = "application/json")
-    public String create(@RequestBody final CreateAttachmentArgs payload) {
+    public String createFile(@RequestBody final CreateAttachmentArgs payload) {
 
         try {
             log.info("Received request to create attachment");
@@ -66,7 +70,7 @@ public class WikiSystemController {
     @RequestMapping(value = "/readfile",
             method = RequestMethod.GET,
             produces = "application/json")
-    public Attachment readfile(@RequestParam String filename) {
+    public Attachment readFile(@RequestParam String filename) {
         log.info("Received request to read page");
         return attachmentService.readAttachment(filename);
     }
@@ -74,7 +78,7 @@ public class WikiSystemController {
     @RequestMapping(value = "/deletefile",
             method = RequestMethod.DELETE,
             produces = "application/json")
-    public String deletefile(@RequestParam String filename) {
+    public String deleteFile(@RequestParam String filename) {
         log.info("Received request to delete page");
         return attachmentService.deleteAttachment(filename);
     }

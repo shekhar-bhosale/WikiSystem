@@ -18,7 +18,7 @@ public class Page extends Component {
     private String parentPageID;
     private List<Attachment> attachments;
 
-    public Page(PageBuilder pageBuilder){
+    private Page(PageBuilder pageBuilder){
 //        this.owner = pageBuilder.owner;
         this.pageID = pageBuilder.pageID;
         this.parentPageID = pageBuilder.parentPageID;

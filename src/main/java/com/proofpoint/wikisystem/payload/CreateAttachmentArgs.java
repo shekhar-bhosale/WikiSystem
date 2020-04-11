@@ -8,4 +8,12 @@ import lombok.Setter;
 public class CreateAttachmentArgs {
     private String filename;
     private String contents;
+
+    @Override
+    public String toString() {
+        return "CreateAttachmentArgs{" +
+                "filename='" + filename + '\'' +
+                ", contents='" + contents + '\'' +
+                '}';
+    }
 }
