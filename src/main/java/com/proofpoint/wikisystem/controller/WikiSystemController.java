@@ -2,6 +2,7 @@ package com.proofpoint.wikisystem.controller;
 
 import com.proofpoint.wikisystem.arguments.CreatePageArgs;
 import com.proofpoint.wikisystem.service.PageService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.AutoConfigureOrder;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -11,6 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.slf4j.LoggerFactory;
 import org.slf4j.Logger;
 
+@Slf4j
 @RestController
 @RequestMapping("/wikisystem")
 public class WikiSystemController {
@@ -18,24 +20,19 @@ public class WikiSystemController {
     @Autowired
     PageService pageService;
 
-    private static Logger logger = LoggerFactory.getLogger(WikiSystemController.class.getName());
-
-    public static Logger getLogger() {
-        return logger;
-    }
-
-    @RequestMapping(value = "/create",
+    @RequestMapping(value = "/createpage",
             method = RequestMethod.POST,
             consumes = "application/json")
     public String create(@RequestBody final CreatePageArgs payload) {
 
         try {
-//            pageService.createPage();
-            return "SUCCESS";
+            pageService.createPage(payload.getPageId(), payload.getParentPageId());
+            return "success";
         } catch (Exception e) {
-            logger.error(e.getMessage());
+            log.error(e.getMessage());
             return e.getMessage();
         }
 
     }
+
 }

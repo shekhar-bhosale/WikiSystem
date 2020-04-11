@@ -36,11 +36,6 @@ public class Page extends Component {
 
         private PageBuilder() {}
 
-        public PageBuilder withOwner(User owner){
-            this.owner = owner;
-            return this;
-        }
-
         public PageBuilder withPageID(String pageID){
             this.pageID = pageID;
             return this;
@@ -57,9 +52,17 @@ public class Page extends Component {
 
     }
 
+    public User getOwner(){
+        return this.owner;
+    }
+
+    public void setOwner(User owner){
+        this.owner = owner;
+    }
+
     public void create(){
         System.out.println("Creating Page");
-//        log.info("Logging");
+        log.info("Logging");
     }
 
     public void addAttachment(Attachment attachment){
