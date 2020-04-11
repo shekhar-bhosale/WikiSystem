@@ -8,14 +8,23 @@ import lombok.Setter;
 public class Attachment extends Component {
 
     private String filename;
+    private String contents;
 
-  /*  public User getOwner(){
+    public User getOwner(){
         return this.owner;
     }
 
     public void setOwner(User owner){
         this.owner = owner;
-    }*/
+    }
+
+    @Override
+    public String toString() {
+        return "Attachment{" +
+                "filename='" + filename + '\'' +
+                ", contents='" + contents + '\'' +
+                '}';
+    }
 
     public void create(){
         System.out.println("Creating Attachment");

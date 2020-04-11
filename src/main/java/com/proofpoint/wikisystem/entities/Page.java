@@ -9,10 +9,9 @@ import lombok.extern.slf4j.Slf4j;
 import java.util.ArrayList;
 import java.util.List;
 
-@Slf4j
-@Getter
-@Setter
-//@Builder
+
+
+ @Setter @Getter @Slf4j
 public class Page extends Component {
 
     private String pageID;
@@ -20,13 +19,21 @@ public class Page extends Component {
     private List<Attachment> attachments;
 
     public Page(PageBuilder pageBuilder){
-        this.owner = pageBuilder.owner;
+//        this.owner = pageBuilder.owner;
         this.pageID = pageBuilder.pageID;
         this.parentPageID = pageBuilder.parentPageID;
     }
 
+    @Override
+    public String toString() {
+        return "Page{" +
+                "pageID='" + pageID + '\'' +
+                ", parentPageID='" + parentPageID + '\'' +
+                '}';
+    }
+
     public static class PageBuilder{
-        private User owner;
+//        private User owner;
         private String pageID;
         private String parentPageID;
 
