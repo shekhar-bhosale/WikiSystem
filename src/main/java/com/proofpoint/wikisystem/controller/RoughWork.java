@@ -1,3 +1,4 @@
+/*
 package com.proofpoint.wikisystem.controller;
 
 import com.proofpoint.wikisystem.entities.Attachment;
@@ -9,3 +10,4 @@ public class RoughWork {
         o1.create();
     }
 }
+*/

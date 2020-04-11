@@ -10,8 +10,14 @@ public class PageService {
 
     private List<Page> pages;
 
-    public void createPage(){
+    public void createPage(String pageID, String parentPageID){
         //Builder pattern in lombok not working
-        Page page = Page.builder()
+        Page page = Page
+                .PageBuilder
+                .newInstance()
+                .withPageID(pageID)
+                .withParentPageID(parentPageID)
+                .build();
+        pages.add(page);
     }
 }
