@@ -1,22 +1,61 @@
 package com.proofpoint.wikisystem.model;
 
-import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
-@Builder @Getter @Setter
+import java.util.HashMap;
+import java.util.List;
+
+@Getter @Setter
 public class Attachment extends Component {
 
     private String filename;
     private String contents;
 
+    private Attachment(Builder builder){
+        this.filename = builder.filename;
+        this.contents = builder.contents;
+        this.owner = builder.owner;
+        this.accessMap = new HashMap<AccessType, List<Collaborator>>();
+    }
+
+    public static class Builder{
+        private User owner;
+        private String filename;
+        private String contents;
+
+        public static Builder newInstance(){
+            return new Builder();
+        }
+
+        private Builder() {}
+
+        public Builder withFilename(String filename){
+            this.filename = filename;
+            return this;
+        }
+
+        public Builder withContents(String contents){
+            this.contents = contents;
+            return this;
+        }
+
+        public Builder withOwner(User owner){
+            this.owner = owner;
+            return this;
+        }
+
+        public Attachment build(){
+            return new Attachment(this);
+        }
+
+    }
+
     public User getOwner(){
         return this.owner;
     }
 
-    public void setOwner(User owner){
-        this.owner = owner;
-    }
+
 
     @Override
     public String toString() {

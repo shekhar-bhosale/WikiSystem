@@ -5,11 +5,12 @@ import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 
-
- @Setter @Getter @Slf4j
+@Setter @Getter @Slf4j
 public class Page extends Component {
 
     private String pageID;
@@ -20,17 +21,21 @@ public class Page extends Component {
         this.owner = pageBuilder.owner;
         this.pageID = pageBuilder.pageID;
         this.parentPageID = pageBuilder.parentPageID;
+        this.accessMap = new HashMap<AccessType, List<Collaborator>>();
     }
 
-    @Override
-    public String toString() {
-        return "Page{" +
-                "pageID='" + pageID + '\'' +
-                ", parentPageID='" + parentPageID + '\'' +
-                '}';
-    }
+     @Override
+     public String toString() {
+         return "Page{" +
+                 "pageID='" + pageID + '\'' +
+                 ", parentPageID='" + parentPageID + '\'' +
+                 ", attachments=" + attachments +
+                 ", owner=" + owner +
+                 ", accessMap=" + accessMap +
+                 '}';
+     }
 
-    public static class PageBuilder{
+     public static class PageBuilder{
         private User owner;
         private String pageID;
         private String parentPageID;
@@ -65,6 +70,8 @@ public class Page extends Component {
     public User getOwner(){
         return this.owner;
     }
+
+
 
     public void create(){
         System.out.println("Creating Page");

@@ -14,6 +14,8 @@ target/
 .springBeans
 .sts4-cache
 
+RoughWork.java
+
 ### IntelliJ IDEA ###
 .idea
 *.iws

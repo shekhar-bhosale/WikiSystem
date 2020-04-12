@@ -3,21 +3,25 @@ package com.proofpoint.wikisystem.service;
 import com.proofpoint.wikisystem.model.Attachment;
 import com.proofpoint.wikisystem.model.User;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
 import java.util.Map;
 
 @Service @Slf4j
+@Scope("singleton")
 public class AttachmentService {
     private Map<String,Attachment> attachments = new HashMap<>();
 
     public void create(String filename, String contents, User owner){
-        Attachment attachment = Attachment.builder()
-                .filename(filename)
-                .contents(contents)
+        Attachment attachment = Attachment
+                .Builder
+                .newInstance()
+                .withFilename(filename)
+                .withContents(contents)
+                .withOwner(owner)
                 .build();
-        attachment.setOwner(owner);
         log.info("Attachment created:"+attachment.toString());
         attachments.put(filename, attachment);
     }

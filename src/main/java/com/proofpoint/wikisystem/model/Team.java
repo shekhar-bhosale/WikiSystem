@@ -1,5 +1,10 @@
 package com.proofpoint.wikisystem.model;
 
+import lombok.Getter;
+import lombok.Setter;
+
+@Getter
+@Setter
 public class Team extends Collaborator {
 
     private boolean isAdmin;

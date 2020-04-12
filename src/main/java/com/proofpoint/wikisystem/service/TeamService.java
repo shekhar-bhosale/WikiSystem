@@ -2,12 +2,14 @@ package com.proofpoint.wikisystem.service;
 
 import com.proofpoint.wikisystem.model.Team;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
 import java.util.Map;
 
 @Service @Slf4j
+@Scope("singleton")
 public class TeamService {
 
     private Map<String, Team> teams = new HashMap<>();
