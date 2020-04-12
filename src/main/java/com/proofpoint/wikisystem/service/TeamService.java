@@ -28,7 +28,9 @@ public class TeamService {
 
     public Team read(String teamID){
         if(teams.containsKey(teamID)){
-            return teams.get(teamID);
+            Team output = teams.get(teamID);
+            log.info("Team found:"+output.toString());
+            return output;
         }else{
             return null;
         }

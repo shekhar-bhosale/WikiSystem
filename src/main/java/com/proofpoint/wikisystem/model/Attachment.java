@@ -5,6 +5,7 @@ import lombok.Setter;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Getter @Setter
 public class Attachment extends Component {
@@ -55,13 +56,13 @@ public class Attachment extends Component {
         return this.owner;
     }
 
-
-
     @Override
     public String toString() {
         return "Attachment{" +
                 "filename='" + filename + '\'' +
                 ", contents='" + contents + '\'' +
+                ", owner=" + owner +
+                ", accessMap=" + accessMap +
                 '}';
     }
 

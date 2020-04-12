@@ -56,6 +56,11 @@ public class AccessController {
                 collaborator = teamService.read(payload.getCollaboratorId());
             }
 
+            if(component==null || collaborator==null){
+                throw new Exception("Given Entities does not exist in system.");
+            }
+
+            log.info("Accesstype:"+AccessType.valueOf(payload.getAccesstype()));
             accessService.assignAccess(component, AccessType.valueOf(payload.getAccesstype()),collaborator);
             ResponseEntity<String> response = new ResponseEntity<>("SUCCESS", HttpStatus.CREATED);
             return response;

@@ -71,8 +71,6 @@ public class Page extends Component {
         return this.owner;
     }
 
-
-
     public void create(){
         System.out.println("Creating Page");
         log.info("Logging");

@@ -28,7 +28,9 @@ public class AttachmentService {
 
     public Attachment read(String filename){
         if(attachments.containsKey(filename)){
-            return attachments.get(filename);
+            Attachment output = attachments.get(filename);
+            log.info("Attachment found:"+output.toString());
+            return output;
         }else{
             return null;
         }

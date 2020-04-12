@@ -10,12 +10,12 @@ public class Team extends Collaborator {
     private boolean isAdmin;
 
     private Team(Builder builder){
-        this.Id = builder.ID;
+        this.Id = builder.Id;
         this.isAdmin = builder.isAdmin;
     }
 
     public static class Builder{
-        private String ID;
+        private String Id;
         private boolean isAdmin;
 
         public static Builder newInstance(){
@@ -24,8 +24,8 @@ public class Team extends Collaborator {
 
         private Builder() {}
 
-        public Builder withID(String ID){
-            this.ID = ID;
+        public Builder withID(String Id){
+            this.Id = Id;
             return this;
         }
 
