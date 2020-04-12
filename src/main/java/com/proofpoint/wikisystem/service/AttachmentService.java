@@ -1,19 +1,17 @@
 package com.proofpoint.wikisystem.service;
 
-import com.proofpoint.wikisystem.entities.Attachment;
+import com.proofpoint.wikisystem.model.Attachment;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 @Service @Slf4j
 public class AttachmentService {
     private Map<String,Attachment> attachments = new HashMap<>();
 
-    public void createAttachment(String filename, String contents){
+    public void create(String filename, String contents){
         Attachment attachment = Attachment.builder()
                 .filename(filename)
                 .contents(contents)
@@ -22,7 +20,7 @@ public class AttachmentService {
         attachments.put(filename, attachment);
     }
 
-    public Attachment readAttachment(String filename){
+    public Attachment read(String filename){
         if(attachments.containsKey(filename)){
             return attachments.get(filename);
         }else{
@@ -30,12 +28,12 @@ public class AttachmentService {
         }
     }
 
-    public String deleteAttachment(String filename){
+    public boolean delete(String filename){
         if(attachments.containsKey(filename)){
             attachments.remove(filename);
-            return "File deleted successfully";
+            return true;
         }else{
-            return "File not found";
+            return false;
         }
     }
 }

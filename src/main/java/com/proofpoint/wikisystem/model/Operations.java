@@ -1,4 +1,4 @@
-package com.proofpoint.wikisystem.entities;
+package com.proofpoint.wikisystem.model;
 
 public interface Operations {
     public void create();

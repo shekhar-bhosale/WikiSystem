@@ -1,4 +1,4 @@
-package com.proofpoint.wikisystem.entities;
+package com.proofpoint.wikisystem.model;
 
 public abstract class Collaborator implements Operations {
     protected String Id;

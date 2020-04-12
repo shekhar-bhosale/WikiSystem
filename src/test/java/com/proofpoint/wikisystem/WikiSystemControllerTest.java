@@ -7,8 +7,6 @@ import org.mockito.Mock;
 
 public class WikiSystemControllerTest {
 
-
-
     @Mock
     PageService pageService;
 

@@ -1,6 +1,6 @@
 package com.proofpoint.wikisystem.service;
 
-import com.proofpoint.wikisystem.entities.User;
+import com.proofpoint.wikisystem.model.User;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
@@ -29,6 +29,15 @@ public class UserService {
             return users.get(userID);
         }else{
             return null;
+        }
+    }
+
+    public String delete(String userId){
+        if(users.containsKey(userId)){
+            users.remove(userId);
+            return "User deleted successfully";
+        }else{
+            return "User not found";
         }
     }
 }
