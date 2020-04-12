@@ -1,31 +1,41 @@
-package com.proofpoint.wikisystem.entities;
+package com.proofpoint.wikisystem.model;
 
-import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
-import lombok.extern.log4j.Log4j;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
-@Slf4j
-@Getter
-@Setter
-//@Builder
+
+@Setter @Getter @Slf4j
 public class Page extends Component {
 
     private String pageID;
     private String parentPageID;
     private List<Attachment> attachments;
 
-    public Page(PageBuilder pageBuilder){
+    private Page(PageBuilder pageBuilder){
         this.owner = pageBuilder.owner;
         this.pageID = pageBuilder.pageID;
         this.parentPageID = pageBuilder.parentPageID;
+        this.accessMap = new HashMap<AccessType, List<Collaborator>>();
     }
 
-    public static class PageBuilder{
+     @Override
+     public String toString() {
+         return "Page{" +
+                 "pageID='" + pageID + '\'' +
+                 ", parentPageID='" + parentPageID + '\'' +
+                 ", attachments=" + attachments +
+                 ", owner=" + owner +
+                 ", accessMap=" + accessMap +
+                 '}';
+     }
+
+     public static class PageBuilder{
         private User owner;
         private String pageID;
         private String parentPageID;
@@ -46,6 +56,11 @@ public class Page extends Component {
             return this;
         }
 
+        public PageBuilder withOwner(User owner){
+            this.owner = owner;
+            return this;
+        }
+
         public Page build(){
             return new Page(this);
         }
@@ -54,10 +69,6 @@ public class Page extends Component {
 
     public User getOwner(){
         return this.owner;
-    }
-
-    public void setOwner(User owner){
-        this.owner = owner;
     }
 
     public void create(){

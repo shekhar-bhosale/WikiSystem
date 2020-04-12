@@ -1,23 +1,56 @@
 package com.proofpoint.wikisystem.service;
 
-import com.proofpoint.wikisystem.entities.Page;
+import com.proofpoint.wikisystem.model.Page;
+import com.proofpoint.wikisystem.model.User;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 
-@Service
+@Service @Slf4j
+@Scope("singleton")
 public class PageService {
 
-    private List<Page> pages;
+    private Map<String,Page> pages = new HashMap<>();
 
-    public void createPage(String pageID, String parentPageID){
-        //Builder pattern in lombok not working
+    public void create(String pageID, String parentPageID, User owner){
+        log.info("Creating page with pageId:"+pageID);
+        /*Page page = Page
+                .builder()
+                .pageID(pageID)
+                .parentPageID(parentPageID)
+                .build();*/
+
         Page page = Page
                 .PageBuilder
                 .newInstance()
                 .withPageID(pageID)
                 .withParentPageID(parentPageID)
+                .withOwner(owner)
                 .build();
-        pages.add(page);
+        log.info("Page created:"+page.toString());
+        pages.put(pageID, page);
+
     }
+
+    public Page read(String pageID){
+        if(pages.containsKey(pageID)){
+            return pages.get(pageID);
+        }else{
+            return null;
+        }
+    }
+
+    public String delete(String pageID){
+        if(pages.containsKey(pageID)){
+            pages.remove(pageID);
+            return "Page deleted successfully";
+        }else{
+            return "Page not found";
+        }
+    }
+
+
 }
