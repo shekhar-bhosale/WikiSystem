@@ -1,6 +1,7 @@
 package com.proofpoint.wikisystem.service;
 
 import com.proofpoint.wikisystem.model.Page;
+import com.proofpoint.wikisystem.model.User;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
@@ -12,7 +13,7 @@ public class PageService {
 
     private Map<String,Page> pages = new HashMap<>();
 
-    public void create(String pageID, String parentPageID){
+    public void create(String pageID, String parentPageID, User owner){
         log.info("Creating page with pageId:"+pageID);
         /*Page page = Page
                 .builder()
@@ -25,6 +26,7 @@ public class PageService {
                 .newInstance()
                 .withPageID(pageID)
                 .withParentPageID(parentPageID)
+                .withOwner(owner)
                 .build();
         log.info("Page created:"+page.toString());
         pages.put(pageID, page);

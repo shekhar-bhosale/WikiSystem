@@ -17,7 +17,7 @@ public class Page extends Component {
     private List<Attachment> attachments;
 
     private Page(PageBuilder pageBuilder){
-//        this.owner = pageBuilder.owner;
+        this.owner = pageBuilder.owner;
         this.pageID = pageBuilder.pageID;
         this.parentPageID = pageBuilder.parentPageID;
     }
@@ -31,7 +31,7 @@ public class Page extends Component {
     }
 
     public static class PageBuilder{
-//        private User owner;
+        private User owner;
         private String pageID;
         private String parentPageID;
 
@@ -51,6 +51,11 @@ public class Page extends Component {
             return this;
         }
 
+        public PageBuilder withOwner(User owner){
+            this.owner = owner;
+            return this;
+        }
+
         public Page build(){
             return new Page(this);
         }
@@ -59,10 +64,6 @@ public class Page extends Component {
 
     public User getOwner(){
         return this.owner;
-    }
-
-    public void setOwner(User owner){
-        this.owner = owner;
     }
 
     public void create(){

@@ -1,8 +1,10 @@
 package com.proofpoint.wikisystem.controller;
 
 import com.proofpoint.wikisystem.model.Attachment;
+import com.proofpoint.wikisystem.model.User;
 import com.proofpoint.wikisystem.payload.CreateAttachmentArgs;
 import com.proofpoint.wikisystem.service.AttachmentService;
+import com.proofpoint.wikisystem.service.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -17,6 +19,9 @@ public class AttachmentController {
     @Autowired
     private AttachmentService attachmentService;
 
+    @Autowired
+    private UserService userService;
+
     @RequestMapping(method = RequestMethod.POST,
             consumes = "application/json")
     public ResponseEntity<String> create(@RequestBody final CreateAttachmentArgs payload) {
@@ -24,7 +29,8 @@ public class AttachmentController {
         try {
             log.info("Received request to create attachment");
             log.info("Payload:"+payload.toString());
-            attachmentService.create(payload.getFilename(), payload.getContents());
+            User owner = userService.read(payload.getOwnerId());
+            attachmentService.create(payload.getFilename(), payload.getContents(),owner);
             ResponseEntity<String> response = new ResponseEntity<>("SUCCESS", HttpStatus.CREATED);
             return response;
         } catch (Exception e) {

@@ -7,12 +7,14 @@ import lombok.Setter;
 public class CreatePageArgs {
     private String pageId;
     private String parentPageId;
+    private String ownerId;
 
     @Override
     public String toString() {
         return "CreatePageArgs{" +
                 "pageId='" + pageId + '\'' +
                 ", parentPageId='" + parentPageId + '\'' +
+                ", ownerId='" + ownerId + '\'' +
                 '}';
     }
 }

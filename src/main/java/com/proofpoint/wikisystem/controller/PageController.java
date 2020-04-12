@@ -1,8 +1,10 @@
 package com.proofpoint.wikisystem.controller;
 
 import com.proofpoint.wikisystem.model.Page;
+import com.proofpoint.wikisystem.model.User;
 import com.proofpoint.wikisystem.payload.CreatePageArgs;
 import com.proofpoint.wikisystem.service.PageService;
+import com.proofpoint.wikisystem.service.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -15,6 +17,9 @@ public class PageController {
     @Autowired
     private PageService pageService;
 
+    @Autowired
+    private UserService userService;
+
     @RequestMapping(method = RequestMethod.POST,
             consumes = "application/json")
     public String create(@RequestBody final CreatePageArgs payload) {
@@ -22,7 +27,8 @@ public class PageController {
         try {
             log.info("Received request to create page");
             log.info("Payload:"+payload.toString());
-            pageService.create(payload.getPageId(), payload.getParentPageId());
+            User owner = userService.read(payload.getOwnerId());
+            pageService.create(payload.getPageId(), payload.getParentPageId(),owner);
             return "success";
         } catch (Exception e) {
             log.error(e.getMessage());

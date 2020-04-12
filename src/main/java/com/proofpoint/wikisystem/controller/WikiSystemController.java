@@ -1,6 +1,8 @@
 package com.proofpoint.wikisystem.controller;
 
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @Slf4j
@@ -8,4 +10,12 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/wikisystem")
 public class WikiSystemController {
 
+    @RequestMapping(method = RequestMethod.GET,
+            produces = "application/json")
+    public ResponseEntity<String> welcomeMessage() {
+        log.info("Welcome page");
+        String message = "Welcome to WikiSystem";
+        ResponseEntity<String> response = new ResponseEntity<>(message, HttpStatus.OK);
+        return response;
+    }
 }
