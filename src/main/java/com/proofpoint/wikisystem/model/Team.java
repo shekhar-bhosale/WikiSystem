@@ -10,35 +10,9 @@ public class Team extends Collaborator {
     private boolean isAdmin;
     //add team members list
 
-    private Team(Builder builder){
+    private Team(Builder builder) {
         this.Id = builder.Id;
         this.isAdmin = builder.isAdmin;
-    }
-
-    public static class Builder{
-        private String Id;
-        private boolean isAdmin;
-
-        public static Builder newInstance(){
-            return new Builder();
-        }
-
-        private Builder() {}
-
-        public Builder withID(String Id){
-            this.Id = Id;
-            return this;
-        }
-
-        public Builder withIsAdmin(boolean isAdmin){
-            this.isAdmin = isAdmin;
-            return this;
-        }
-
-        public Team build(){
-            return new Team(this);
-        }
-
     }
 
     @Override
@@ -49,15 +23,42 @@ public class Team extends Collaborator {
                 '}';
     }
 
-    public void create(){
+    public void create() {
         System.out.println("Creating team");
     }
 
-    public void delete(){
+    public void delete() {
         System.out.println("Deleting team");
     }
 
-    public void update(){
+    public void update() {
         System.out.println("Updating team");
+    }
+
+    public static class Builder {
+        private String Id;
+        private boolean isAdmin;
+
+        private Builder() {
+        }
+
+        public static Builder newInstance() {
+            return new Builder();
+        }
+
+        public Builder withID(String Id) {
+            this.Id = Id;
+            return this;
+        }
+
+        public Builder withIsAdmin(boolean isAdmin) {
+            this.isAdmin = isAdmin;
+            return this;
+        }
+
+        public Team build() {
+            return new Team(this);
+        }
+
     }
 }

@@ -15,13 +15,13 @@ public class TeamController {
     @Autowired
     private TeamService teamService;
 
-    @RequestMapping(method = RequestMethod.POST,
-            consumes = "application/json")
+    @RequestMapping(method = RequestMethod.POST, consumes = "application/json")
     public String create(@RequestBody final CreateTeamArgs payload) {
 
         try {
             log.info("Received request to create team");
-            log.info("Payload:"+payload.toString());
+            log.info("Payload:" + payload.toString());
+
             teamService.create(payload.getTeamId(), payload.isAdmin());
             return "SUCEESS";
         } catch (Exception e) {
@@ -31,15 +31,13 @@ public class TeamController {
 
     }
 
-    @RequestMapping(method = RequestMethod.GET,
-            produces = "application/json")
+    @RequestMapping(method = RequestMethod.GET, produces = "application/json")
     public Team read(@RequestParam String teamId) {
         log.info("Received request to read team");
         return teamService.read(teamId);
     }
 
-    @RequestMapping(method = RequestMethod.DELETE,
-            produces = "application/json")
+    @RequestMapping(method = RequestMethod.DELETE, produces = "application/json")
     public String delete(@RequestParam String teamId) {
         log.info("Received request to delete team");
         return teamService.delete(teamId);

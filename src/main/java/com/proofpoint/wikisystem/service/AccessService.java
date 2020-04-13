@@ -16,15 +16,15 @@ import java.util.Map;
 @Slf4j
 public class AccessService {
 
-    public void assignAccess(Component component, AccessType accessType, Collaborator collaborator){
-        Map<AccessType, List<Collaborator>> accessMap = component.getAccessMap();
+    public void assignAccess(final Component component, final AccessType accessType, final Collaborator collaborator) {
+        final Map<AccessType, List<Collaborator>> accessMap = component.getAccessMap();
 //        log.info("Access map received:"+accessMap.toString());
-        if(accessMap.containsKey(accessType)){
+        if (accessMap.containsKey(accessType)) {
             accessMap.get(accessType).add(collaborator);
-        }else{
+        } else {
             List<Collaborator> list = new ArrayList<>();
             list.add(collaborator);
-            accessMap.put(accessType,list);
+            accessMap.put(accessType, list);
         }
     }
 }

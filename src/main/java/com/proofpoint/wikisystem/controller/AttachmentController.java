@@ -11,6 +11,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import static com.proofpoint.wikisystem.util.Constants.STATUS_FAILED;
+import static com.proofpoint.wikisystem.util.Constants.STATUS_SUCCESS;
+
 @Slf4j
 @RestController
 @RequestMapping("/wikisystem/attachment")
@@ -22,50 +25,55 @@ public class AttachmentController {
     @Autowired
     private UserService userService;
 
-    @RequestMapping(method = RequestMethod.POST,
-            consumes = "application/json")
+    @RequestMapping(method = RequestMethod.POST, consumes = "application/json")
     public ResponseEntity<String> create(@RequestBody final CreateAttachmentArgs payload) {
 
         try {
             log.info("Received request to create attachment");
-            log.info("Payload:"+payload.toString());
+            log.info("Payload:" + payload.toString());
+
             User owner = userService.read(payload.getOwnerId());
-            attachmentService.create(payload.getFilename(), payload.getContents(),owner);
-            ResponseEntity<String> response = new ResponseEntity<>("SUCCESS", HttpStatus.CREATED);
-            return response;
-        } catch (Exception e) {
-            log.error(e.getMessage());
-            ResponseEntity<String> response = new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
-            return response;
+            attachmentService.create(payload.getFilename(), payload.getContents(), owner);
+
+            return new ResponseEntity<>(STATUS_SUCCESS, HttpStatus.CREATED);
+
+        } catch (final Exception e) {
+            log.error("Caught Exception while creating attachment. " + e.getMessage());
+            return new ResponseEntity<>(STATUS_FAILED + e.getMessage(), HttpStatus.BAD_REQUEST);
         }
 
     }
 
-    @RequestMapping(method = RequestMethod.GET,
-            produces = "application/json")
-    public ResponseEntity<Attachment> read(@RequestParam String filename) {
+    @RequestMapping(method = RequestMethod.GET, produces = "application/json")
+    public ResponseEntity<Attachment> read(@RequestParam final String fileName) {
         log.info("Received request to read attachment");
-        Attachment output = attachmentService.read(filename);
-        ResponseEntity<Attachment> response;
 
-        if(output!=null){
+        final Attachment output = attachmentService.read(fileName);
+        ResponseEntity<Attachment> response;
+        if (output != null) {
             response = new ResponseEntity<>(output, HttpStatus.OK);
-        }else{
+        } else {
             response = new ResponseEntity<>(output, HttpStatus.NOT_FOUND);
         }
+
+        //TODO: Construct Response
         return response;
     }
 
-    @RequestMapping(method = RequestMethod.DELETE,
-            produces = "application/json")
-    public ResponseEntity<String> delete(@RequestParam String filename) {
+    @RequestMapping(method = RequestMethod.DELETE, produces = "application/json")
+    public ResponseEntity<String> delete(@RequestParam final String fileName) {
+
         log.info("Received request to delete attachment");
+
         ResponseEntity<String> response;
-       if(attachmentService.delete(filename)){
-           response = new ResponseEntity<>("File deleted successfully", HttpStatus.OK);
-       }else{
-           response = new ResponseEntity<>("File not found", HttpStatus.NOT_FOUND);
-       }
-       return response;
+        if (attachmentService.delete(fileName)) {
+            response = new ResponseEntity<>("File deleted successfully", HttpStatus.OK);
+        } else {
+            response = new ResponseEntity<>("File not found", HttpStatus.NOT_FOUND);
+        }
+
+        //TODO: Construct Response
+        return response;
+
     }
 }

@@ -3,7 +3,8 @@ package com.proofpoint.wikisystem.payload;
 import lombok.Getter;
 import lombok.Setter;
 
-@Setter @Getter
+@Setter
+@Getter
 public class CreateTeamArgs {
     private String teamId;
     private boolean isAdmin;

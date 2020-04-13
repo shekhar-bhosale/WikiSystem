@@ -9,12 +9,13 @@ import org.springframework.stereotype.Service;
 import java.util.HashMap;
 import java.util.Map;
 
-@Service @Slf4j
+@Service
+@Slf4j
 @Scope("singleton")
 public class AttachmentService {
-    private Map<String,Attachment> attachments = new HashMap<>();
+    private Map<String, Attachment> attachments = new HashMap<>();
 
-    public void create(String filename, String contents, User owner){
+    public void create(String filename, String contents, User owner) {
         Attachment attachment = Attachment
                 .Builder
                 .newInstance()
@@ -22,25 +23,25 @@ public class AttachmentService {
                 .withContents(contents)
                 .withOwner(owner)
                 .build();
-        log.info("Attachment created:"+attachment.toString());
+        log.info("Attachment created:" + attachment.toString());
         attachments.put(filename, attachment);
     }
 
-    public Attachment read(String filename){
-        if(attachments.containsKey(filename)){
+    public Attachment read(String filename) {
+        if (attachments.containsKey(filename)) {
             Attachment output = attachments.get(filename);
-            log.info("Attachment found:"+output.toString());
+            log.info("Attachment found:" + output.toString());
             return output;
-        }else{
+        } else {
             return null;
         }
     }
 
-    public boolean delete(String filename){
-        if(attachments.containsKey(filename)){
+    public boolean delete(String filename) {
+        if (attachments.containsKey(filename)) {
             attachments.remove(filename);
             return true;
-        }else{
+        } else {
             return false;
         }
     }

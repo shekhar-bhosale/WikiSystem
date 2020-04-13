@@ -8,39 +8,40 @@ import org.springframework.stereotype.Service;
 import java.util.HashMap;
 import java.util.Map;
 
-@Service @Slf4j
+@Service
+@Slf4j
 @Scope("singleton")
 public class TeamService {
 
     private Map<String, Team> teams = new HashMap<>();
 
-    public void create(String ID, boolean isAdmin){
-        log.info("Creating team with team:"+ID);
+    public void create(String ID, boolean isAdmin) {
+        log.info("Creating team with team:" + ID);
         Team team = Team.Builder
                 .newInstance()
                 .withID(ID)
                 .withIsAdmin(isAdmin)
                 .build();
-        log.info("Team created:"+team.toString());
+        log.info("Team created:" + team.toString());
         teams.put(ID, team);
 
     }
 
-    public Team read(String teamID){
-        if(teams.containsKey(teamID)){
+    public Team read(String teamID) {
+        if (teams.containsKey(teamID)) {
             Team output = teams.get(teamID);
-            log.info("Team found:"+output.toString());
+            log.info("Team found:" + output.toString());
             return output;
-        }else{
+        } else {
             return null;
         }
     }
 
-    public String delete(String teamId){
-        if(teams.containsKey(teamId)){
+    public String delete(String teamId) {
+        if (teams.containsKey(teamId)) {
             teams.remove(teamId);
             return "Team deleted successfully";
-        }else{
+        } else {
             return "Team not found";
         }
     }

@@ -1,5 +1,6 @@
 package com.proofpoint.wikisystem.controller;
 
+import com.proofpoint.wikisystem.exceptions.AccessDeniedException;
 import com.proofpoint.wikisystem.model.AccessType;
 import com.proofpoint.wikisystem.model.Collaborator;
 import com.proofpoint.wikisystem.model.Component;
@@ -13,6 +14,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
+
+import static com.proofpoint.wikisystem.util.Constants.STATUS_SUCCESS;
 
 @Slf4j
 @RestController
@@ -34,40 +37,38 @@ public class AccessController {
     @Autowired
     private TeamService teamService;
 
-    @RequestMapping(method = RequestMethod.POST,
-            consumes = "application/json")
+    @RequestMapping(method = RequestMethod.POST, consumes = "application/json")
     public ResponseEntity<String> create(@RequestBody final CreateAccessArgs payload) {
 
-        try{
+        try {
             log.info("Received request to create access");
-            log.info("Payload received:"+ payload.toString());
+            log.info("Payload received:" + payload.toString());
+
             Component component;
             Collaborator collaborator;
 
-            if(payload.isPage()){
+            if (payload.isPage()) {
                 component = pageService.read(payload.getComponentId());
-            }else{
+            } else {
                 component = attachmentService.read(payload.getComponentId());
             }
 
-            if(payload.isIndividualUser()){
+            if (payload.isIndividualUser()) {
                 collaborator = userService.read(payload.getCollaboratorId());
-            }else{
+            } else {
                 collaborator = teamService.read(payload.getCollaboratorId());
             }
 
-            if(component==null || collaborator==null){
-                throw new Exception("Given Entities does not exist in system.");
+            if (component == null || collaborator == null) {
+                throw new AccessDeniedException("Given Entities does not exist in system.");
             }
 
-            log.info("Accesstype:"+AccessType.valueOf(payload.getAccesstype()));
-            accessService.assignAccess(component, AccessType.valueOf(payload.getAccesstype()),collaborator);
-            ResponseEntity<String> response = new ResponseEntity<>("SUCCESS", HttpStatus.CREATED);
-            return response;
-        } catch (Exception e) {
+            accessService.assignAccess(component, AccessType.valueOf(payload.getAccessType()), collaborator);
+            return new ResponseEntity<>(STATUS_SUCCESS, HttpStatus.CREATED);
+
+        } catch (final Exception e) {
             log.error(e.getMessage());
-            ResponseEntity<String> response = new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
-            return response;
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
 
     }

@@ -3,10 +3,11 @@ package com.proofpoint.wikisystem.payload;
 import lombok.Getter;
 import lombok.Setter;
 
-@Getter @Setter
+@Getter
+@Setter
 public class CreateAccessArgs {
     private String componentId;
-    private String accesstype;
+    private String accessType;
     private String collaboratorId;
     private boolean isPage;
     private boolean isIndividualUser;
@@ -15,7 +16,7 @@ public class CreateAccessArgs {
     public String toString() {
         return "CreateAccessArgs{" +
                 "componentId='" + componentId + '\'' +
-                ", accesstype='" + accesstype + '\'' +
+                ", accesstype='" + accessType + '\'' +
                 ", collaboratorId='" + collaboratorId + '\'' +
                 ", isPage=" + isPage +
                 ", isIndividualUser=" + isIndividualUser +

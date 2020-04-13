@@ -15,14 +15,13 @@ public class UserController {
     @Autowired
     private UserService userService;
 
-    @RequestMapping(method = RequestMethod.POST,
-            consumes = "application/json")
+    @RequestMapping(method = RequestMethod.POST, consumes = "application/json")
     public String create(@RequestBody final CreateUserArgs payload) {
 
         try {
             log.info("Received request to create user");
-            log.info("Payload:"+payload.toString());
-            userService.create(payload.getUserId(), payload.getUsername());
+            log.info("Payload:" + payload.toString());
+            userService.create(payload.getUserId(), payload.getUserName());
             return "SUCCESS";
         } catch (Exception e) {
             log.error(e.getMessage());
@@ -31,15 +30,13 @@ public class UserController {
 
     }
 
-    @RequestMapping(method = RequestMethod.GET,
-            produces = "application/json")
-    public User read(@RequestParam String userID) {
+    @RequestMapping(method = RequestMethod.GET, produces = "application/json")
+    public User read(final @RequestParam String userID) {
         log.info("Received request to read user");
         return userService.read(userID);
     }
 
-    @RequestMapping(method = RequestMethod.DELETE,
-            produces = "application/json")
+    @RequestMapping(method = RequestMethod.DELETE, produces = "application/json")
     public String delete(@RequestParam String userId) {
         log.info("Received request to delete user");
         return userService.delete(userId);

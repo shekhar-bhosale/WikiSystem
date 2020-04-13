@@ -9,20 +9,15 @@ import org.springframework.stereotype.Service;
 import java.util.HashMap;
 import java.util.Map;
 
-@Service @Slf4j
+@Service
+@Slf4j
 @Scope("singleton")
 public class PageService {
 
-    private Map<String,Page> pages = new HashMap<>();
+    private Map<String, Page> pages = new HashMap<>();
 
-    public void create(String pageID, String parentPageID, User owner){
-        log.info("Creating page with pageId:"+pageID);
-        /*Page page = Page
-                .builder()
-                .pageID(pageID)
-                .parentPageID(parentPageID)
-                .build();*/
-
+    public void create(String pageID, String parentPageID, User owner) {
+        log.info("Creating page with pageId:" + pageID);
         Page page = Page
                 .PageBuilder
                 .newInstance()
@@ -30,24 +25,24 @@ public class PageService {
                 .withParentPageID(parentPageID)
                 .withOwner(owner)
                 .build();
-        log.info("Page created:"+page.toString());
+        log.info("Page created:" + page.toString());
         pages.put(pageID, page);
 
     }
 
-    public Page read(String pageID){
-        if(pages.containsKey(pageID)){
+    public Page read(String pageID) {
+        if (pages.containsKey(pageID)) {
             return pages.get(pageID);
-        }else{
+        } else {
             return null;
         }
     }
 
-    public String delete(String pageID){
-        if(pages.containsKey(pageID)){
+    public String delete(String pageID) {
+        if (pages.containsKey(pageID)) {
             pages.remove(pageID);
             return "Page deleted successfully";
-        }else{
+        } else {
             return "Page not found";
         }
     }
