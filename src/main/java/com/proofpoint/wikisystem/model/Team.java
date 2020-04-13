@@ -8,6 +8,7 @@ import lombok.Setter;
 public class Team extends Collaborator {
 
     private boolean isAdmin;
+    //add team members list
 
     private Team(Builder builder){
         this.Id = builder.Id;
