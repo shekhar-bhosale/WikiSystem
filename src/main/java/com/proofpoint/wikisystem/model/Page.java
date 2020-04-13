@@ -23,6 +23,7 @@ public class Page extends Component {
         this.owner = pageBuilder.owner;
         this.pageID = pageBuilder.pageID;
         this.parentPageID = pageBuilder.parentPageID;
+        this.content = pageBuilder.content;
         this.accessMap = new HashMap<AccessType, List<Collaborator>>();
     }
 
@@ -32,6 +33,7 @@ public class Page extends Component {
                 "pageID='" + pageID + '\'' +
                 ", parentPageID='" + parentPageID + '\'' +
                 ", attachments=" + attachments +
+                ", content='" + content + '\'' +
                 ", owner=" + owner +
                 ", accessMap=" + accessMap +
                 '}';
@@ -65,6 +67,7 @@ public class Page extends Component {
         private User owner;
         private String pageID;
         private String parentPageID;
+        private String content;
 
         private PageBuilder() {
         }
@@ -85,6 +88,16 @@ public class Page extends Component {
 
         public PageBuilder withOwner(User owner) {
             this.owner = owner;
+            return this;
+        }
+
+        public PageBuilder withContent(String content) {
+            this.content = content;
+            return this;
+        }
+
+        public PageBuilder withAccessRights() {
+
             return this;
         }
 

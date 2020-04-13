@@ -2,23 +2,31 @@ package com.proofpoint.wikisystem.model;
 
 import lombok.Getter;
 import lombok.Setter;
+import lombok.extern.slf4j.Slf4j;
+
+import java.util.ArrayList;
+import java.util.List;
+import static com.proofpoint.wikisystem.util.Constants.*;
 
 @Getter
 @Setter
+@Slf4j
 public class Team extends Collaborator {
 
     private boolean isAdmin;
-    //add team members list
+    private List<User> members;
 
     private Team(Builder builder) {
         this.Id = builder.Id;
         this.isAdmin = builder.isAdmin;
+        this.members = new ArrayList<>();
     }
 
     @Override
     public String toString() {
         return "Team{" +
                 "isAdmin=" + isAdmin +
+                ", members=" + members +
                 ", Id='" + Id + '\'' +
                 '}';
     }
@@ -60,5 +68,15 @@ public class Team extends Collaborator {
             return new Team(this);
         }
 
+    }
+
+    public String addMember(User user){
+        try{
+            members.add(user);
+            return STATUS_SUCCESS;
+        }catch (RuntimeException e){
+            log.info("Exception when adding member to team:"+e.getMessage());
+            return STATUS_FAILED;
+        }
     }
 }

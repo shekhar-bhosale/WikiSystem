@@ -5,6 +5,8 @@ import com.proofpoint.wikisystem.payload.CreateTeamArgs;
 import com.proofpoint.wikisystem.service.TeamService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @Slf4j
@@ -41,5 +43,13 @@ public class TeamController {
     public String delete(@RequestParam String teamId) {
         log.info("Received request to delete team");
         return teamService.delete(teamId);
+    }
+
+
+    @RequestMapping(value = "/addmember", method = RequestMethod.POST, consumes = "application/json")
+    public ResponseEntity<String> addMember(@RequestParam String teamId, @RequestParam String userId) {
+        log.info("Received request to add member to team");
+        String result = teamService.addMembertoTeam(teamId, userId);
+        return new ResponseEntity<>(result, HttpStatus.OK);
     }
 }

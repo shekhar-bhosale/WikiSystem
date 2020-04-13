@@ -16,7 +16,7 @@ public class PageService {
 
     private Map<String, Page> pages = new HashMap<>();
 
-    public void create(String pageID, String parentPageID, User owner) {
+    public void create(String pageID, String parentPageID, User owner, String content) {
         log.info("Creating page with pageId:" + pageID);
         Page page = Page
                 .PageBuilder
@@ -24,6 +24,7 @@ public class PageService {
                 .withPageID(pageID)
                 .withParentPageID(parentPageID)
                 .withOwner(owner)
+                .withContent(content)
                 .build();
         log.info("Page created:" + page.toString());
         pages.put(pageID, page);
@@ -31,11 +32,7 @@ public class PageService {
     }
 
     public Page read(String pageID) {
-        if (pages.containsKey(pageID)) {
-            return pages.get(pageID);
-        } else {
-            return null;
-        }
+        return pages.getOrDefault(pageID, null);
     }
 
     public String delete(String pageID) {

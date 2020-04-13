@@ -9,6 +9,7 @@ public class CreatePageArgs {
     private String pageId;
     private String parentPageId;
     private String ownerId;
+    private String content;
 
     @Override
     public String toString() {
@@ -16,6 +17,7 @@ public class CreatePageArgs {
                 "pageId='" + pageId + '\'' +
                 ", parentPageId='" + parentPageId + '\'' +
                 ", ownerId='" + ownerId + '\'' +
+                ", content='" + content + '\'' +
                 '}';
     }
 }

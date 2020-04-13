@@ -1,7 +1,9 @@
 package com.proofpoint.wikisystem.service;
 
 import com.proofpoint.wikisystem.model.Team;
+import com.proofpoint.wikisystem.model.User;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
 
@@ -12,6 +14,9 @@ import java.util.Map;
 @Slf4j
 @Scope("singleton")
 public class TeamService {
+
+    @Autowired
+    private UserService userService;
 
     private Map<String, Team> teams = new HashMap<>();
 
@@ -42,6 +47,21 @@ public class TeamService {
             teams.remove(teamId);
             return "Team deleted successfully";
         } else {
+            return "Team not found";
+        }
+    }
+
+    public String addMembertoTeam(String teamId, String userId){
+        if(teams.containsKey(teamId)){
+            Team team = teams.get(teamId);
+            User user = userService.read(userId);
+
+            if(user!=null){
+                return team.addMember(user);
+            }else{
+                return "User not found";
+            }
+        }else{
             return "Team not found";
         }
     }
