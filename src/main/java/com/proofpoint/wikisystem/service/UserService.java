@@ -28,6 +28,7 @@ public class UserService {
     }
 
     public User read(String userID) {
+        log.info("Checking if user "+userID+" exists in system.");
         return users.getOrDefault(userID, null);
     }
 

@@ -3,6 +3,7 @@ package com.proofpoint.wikisystem.controller;
 import com.proofpoint.wikisystem.model.Attachment;
 import com.proofpoint.wikisystem.model.User;
 import com.proofpoint.wikisystem.payload.CreateAttachmentArgs;
+import com.proofpoint.wikisystem.payload.UpdateAttachmentArgs;
 import com.proofpoint.wikisystem.service.AttachmentService;
 import com.proofpoint.wikisystem.service.UserService;
 import lombok.extern.slf4j.Slf4j;
@@ -33,7 +34,7 @@ public class AttachmentController {
             log.info("Payload:" + payload.toString());
 
             User owner = userService.read(payload.getOwnerId());
-            attachmentService.create(payload.getFilename(), payload.getContents(), owner);
+            attachmentService.create(payload.getFilename(), payload.getContents(), owner, payload.getAccessMap());
 
             return new ResponseEntity<>(STATUS_SUCCESS, HttpStatus.CREATED);
 
@@ -50,6 +51,22 @@ public class AttachmentController {
 
         final Attachment output = attachmentService.read(fileName);
         ResponseEntity<Attachment> response;
+        if (output != null) {
+            response = new ResponseEntity<>(output, HttpStatus.OK);
+        } else {
+            response = new ResponseEntity<>(output, HttpStatus.NOT_FOUND);
+        }
+
+        //TODO: Construct Response
+        return response;
+    }
+
+    @RequestMapping(method = RequestMethod.PUT, consumes = "application/json")
+    public ResponseEntity<String> update(@RequestParam final String fileName, @RequestBody final UpdateAttachmentArgs payload, @RequestParam final String requesterId) {
+        log.info("Received request to update attachment");
+        String output = attachmentService.update(fileName, payload, requesterId);
+
+        ResponseEntity<String> response;
         if (output != null) {
             response = new ResponseEntity<>(output, HttpStatus.OK);
         } else {

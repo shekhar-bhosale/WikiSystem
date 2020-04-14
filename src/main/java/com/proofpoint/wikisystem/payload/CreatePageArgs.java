@@ -3,6 +3,8 @@ package com.proofpoint.wikisystem.payload;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.Map;
+
 @Getter
 @Setter
 public class CreatePageArgs {
@@ -10,6 +12,7 @@ public class CreatePageArgs {
     private String parentPageId;
     private String ownerId;
     private String content;
+    private Map<String, String> accessMap;
 
     @Override
     public String toString() {
@@ -18,6 +21,8 @@ public class CreatePageArgs {
                 ", parentPageId='" + parentPageId + '\'' +
                 ", ownerId='" + ownerId + '\'' +
                 ", content='" + content + '\'' +
+                ", accessMap=" + accessMap +
                 '}';
     }
 }
+

@@ -24,6 +24,10 @@ public class Attachment extends Component {
         return this.owner;
     }
 
+    public void setOwner(User owner){
+        this.owner = owner;
+    }
+
     @Override
     public String toString() {
         return "Attachment{" +

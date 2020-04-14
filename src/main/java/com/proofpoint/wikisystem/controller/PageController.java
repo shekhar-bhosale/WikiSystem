@@ -30,7 +30,7 @@ public class PageController {
             log.info("Payload:" + payload.toString());
 
             User owner = userService.read(payload.getOwnerId());
-            pageService.create(payload.getPageId(), payload.getParentPageId(), owner, payload.getContent());
+            pageService.create(payload.getPageId(), payload.getParentPageId(), owner, payload.getContent(), payload.getAccessMap());
 
             //TODO: Construct Response
             return STATUS_SUCCESS;
