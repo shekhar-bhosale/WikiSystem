@@ -96,10 +96,6 @@ public class Page extends Component {
             return this;
         }
 
-        public PageBuilder withAccessRights() {
-
-            return this;
-        }
 
         public Page build() {
             return new Page(this);

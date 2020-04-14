@@ -7,6 +7,7 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @Service
@@ -51,6 +52,11 @@ public class PageService {
                 accessService.assignAccess(page, AccessType.valueOf(accessMap.get(collaboratorId)), collaborator);
             }
         }
+        else{
+            log.info("Inheriting access from parent hierarchy");
+            //TODO: Implement Inheriting access from parent hierarchy
+            page.setAccessMap(inheritAccess(page));
+        }
         log.info("Page created:" + page.toString());
         pages.put(pageID, page);
 
@@ -67,6 +73,19 @@ public class PageService {
         } else {
             return "Page not found";
         }
+    }
+
+    private Map<AccessType, List<Collaborator>> inheritAccess(Page page){
+        Map<AccessType, List<Collaborator>> accessMap = null;
+
+        while(accessMap==null){
+            String parentPageId = page.getParentPageID();
+            Page parentPage = pages.get(parentPageId);
+            accessMap = parentPage.getAccessMap();
+            page = parentPage;
+        }
+
+        return accessMap;
     }
 
 
