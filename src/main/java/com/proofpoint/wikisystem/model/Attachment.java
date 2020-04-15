@@ -24,7 +24,7 @@ public class Attachment extends Component {
         return this.owner;
     }
 
-    public void setOwner(User owner){
+    public void setOwner(User owner) {
         this.owner = owner;
     }
 
@@ -40,6 +40,10 @@ public class Attachment extends Component {
 
     public void create() {
         System.out.println("Creating Attachment");
+    }
+
+    public void read() {
+        System.out.println("Reading Page");
     }
 
     public void delete() {

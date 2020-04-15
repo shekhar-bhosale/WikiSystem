@@ -6,7 +6,9 @@ import lombok.extern.slf4j.Slf4j;
 
 import java.util.ArrayList;
 import java.util.List;
-import static com.proofpoint.wikisystem.util.Constants.*;
+
+import static com.proofpoint.wikisystem.util.Constants.STATUS_FAILED;
+import static com.proofpoint.wikisystem.util.Constants.STATUS_SUCCESS;
 
 @Getter
 @Setter
@@ -35,12 +37,26 @@ public class Team extends Collaborator {
         System.out.println("Creating team");
     }
 
+    public void read() {
+        System.out.println("Reading Page");
+    }
+
     public void delete() {
         System.out.println("Deleting team");
     }
 
     public void update() {
         System.out.println("Updating team");
+    }
+
+    public String addMember(User user) {
+        try {
+            members.add(user);
+            return STATUS_SUCCESS;
+        } catch (RuntimeException e) {
+            log.info("Exception when adding member to team:" + e.getMessage());
+            return STATUS_FAILED;
+        }
     }
 
     public static class Builder {
@@ -68,15 +84,5 @@ public class Team extends Collaborator {
             return new Team(this);
         }
 
-    }
-
-    public String addMember(User user){
-        try{
-            members.add(user);
-            return STATUS_SUCCESS;
-        }catch (RuntimeException e){
-            log.info("Exception when adding member to team:"+e.getMessage());
-            return STATUS_FAILED;
-        }
     }
 }

@@ -19,11 +19,11 @@ public class Page extends Component {
     private List<Attachment> attachments;
     private String content;
 
-    private Page(PageBuilder pageBuilder) {
-        this.owner = pageBuilder.owner;
-        this.pageID = pageBuilder.pageID;
-        this.parentPageID = pageBuilder.parentPageID;
-        this.content = pageBuilder.content;
+    private Page(Builder builder) {
+        this.owner = builder.owner;
+        this.pageID = builder.pageID;
+        this.parentPageID = builder.parentPageID;
+        this.content = builder.content;
         this.accessMap = new HashMap<AccessType, List<Collaborator>>();
     }
 
@@ -43,16 +43,12 @@ public class Page extends Component {
         return this.owner;
     }
 
-    public void create() {
-        System.out.println("Creating Page");
-        log.info("Logging");
+    public void read() {
+        System.out.println("Reading Page");
     }
 
-    public void addAttachment(Attachment attachment) {
-        if (this.attachments == null) {
-            this.attachments = new ArrayList<Attachment>();
-        }
-        attachments.add(attachment);
+    public void create() {
+        System.out.println("Creating Page");
     }
 
     public void delete() {
@@ -63,35 +59,43 @@ public class Page extends Component {
         System.out.println("Updating Page");
     }
 
-    public static class PageBuilder {
+    public void addAttachment(Attachment attachment) {
+        if (this.attachments == null) {
+            this.attachments = new ArrayList<Attachment>();
+        }
+        attachments.add(attachment);
+    }
+
+
+    public static class Builder {
         private User owner;
         private String pageID;
         private String parentPageID;
         private String content;
 
-        private PageBuilder() {
+        private Builder() {
         }
 
-        public static PageBuilder newInstance() {
-            return new PageBuilder();
+        public static Builder newInstance() {
+            return new Builder();
         }
 
-        public PageBuilder withPageID(String pageID) {
+        public Builder withPageID(String pageID) {
             this.pageID = pageID;
             return this;
         }
 
-        public PageBuilder withParentPageID(String parentPageID) {
+        public Builder withParentPageID(String parentPageID) {
             this.parentPageID = parentPageID;
             return this;
         }
 
-        public PageBuilder withOwner(User owner) {
+        public Builder withOwner(User owner) {
             this.owner = owner;
             return this;
         }
 
-        public PageBuilder withContent(String content) {
+        public Builder withContent(String content) {
             this.content = content;
             return this;
         }

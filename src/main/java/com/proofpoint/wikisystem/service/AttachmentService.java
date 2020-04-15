@@ -4,7 +4,7 @@ import com.proofpoint.wikisystem.model.AccessType;
 import com.proofpoint.wikisystem.model.Attachment;
 import com.proofpoint.wikisystem.model.Collaborator;
 import com.proofpoint.wikisystem.model.User;
-import com.proofpoint.wikisystem.payload.UpdateAttachmentArgs;
+import com.proofpoint.wikisystem.payload.UpdateComponentArgs;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
@@ -66,7 +66,7 @@ public class AttachmentService {
         }
     }
 
-    public String update(String filename, UpdateAttachmentArgs updateArgs, String requesterId){
+    public String update(String filename, UpdateComponentArgs updateArgs, String requesterId){
         if(attachments.containsKey(filename)){
             Attachment attachment = attachments.get(filename);
             if(updateArgs.getContents()!=null){
@@ -80,8 +80,10 @@ public class AttachmentService {
                     attachment.setOwner(owner);
                 }
             }
+            return "Successfully updated attachment";
+        }else{
+            return "Attachment not found";
         }
-        return "Successfully updated attachment";
     }
 
     private boolean isAuthorized(Attachment attachment, String requesterId){

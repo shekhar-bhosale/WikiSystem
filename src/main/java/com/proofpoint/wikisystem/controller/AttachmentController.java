@@ -3,7 +3,7 @@ package com.proofpoint.wikisystem.controller;
 import com.proofpoint.wikisystem.model.Attachment;
 import com.proofpoint.wikisystem.model.User;
 import com.proofpoint.wikisystem.payload.CreateAttachmentArgs;
-import com.proofpoint.wikisystem.payload.UpdateAttachmentArgs;
+import com.proofpoint.wikisystem.payload.UpdateComponentArgs;
 import com.proofpoint.wikisystem.service.AttachmentService;
 import com.proofpoint.wikisystem.service.UserService;
 import lombok.extern.slf4j.Slf4j;
@@ -12,8 +12,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import static com.proofpoint.wikisystem.util.Constants.STATUS_FAILED;
-import static com.proofpoint.wikisystem.util.Constants.STATUS_SUCCESS;
+import static com.proofpoint.wikisystem.util.Constants.*;
 
 @Slf4j
 @RestController
@@ -40,7 +39,7 @@ public class AttachmentController {
 
         } catch (final Exception e) {
             log.error("Caught Exception while creating attachment. " + e.getMessage());
-            return new ResponseEntity<>(STATUS_FAILED + e.getMessage(), HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(STATUS_FAILED_WITH_MESSAGE + e.getMessage(), HttpStatus.BAD_REQUEST);
         }
 
     }
@@ -57,12 +56,11 @@ public class AttachmentController {
             response = new ResponseEntity<>(output, HttpStatus.NOT_FOUND);
         }
 
-        //TODO: Construct Response
         return response;
     }
 
     @RequestMapping(method = RequestMethod.PUT, consumes = "application/json")
-    public ResponseEntity<String> update(@RequestParam final String fileName, @RequestBody final UpdateAttachmentArgs payload, @RequestParam final String requesterId) {
+    public ResponseEntity<String> update(@RequestParam final String fileName, @RequestBody final UpdateComponentArgs payload, @RequestParam final String requesterId) {
         log.info("Received request to update attachment");
         String output = attachmentService.update(fileName, payload, requesterId);
 
@@ -73,7 +71,6 @@ public class AttachmentController {
             response = new ResponseEntity<>(output, HttpStatus.NOT_FOUND);
         }
 
-        //TODO: Construct Response
         return response;
     }
 
@@ -89,7 +86,6 @@ public class AttachmentController {
             response = new ResponseEntity<>("File not found", HttpStatus.NOT_FOUND);
         }
 
-        //TODO: Construct Response
         return response;
 
     }

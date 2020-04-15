@@ -2,6 +2,7 @@ package com.proofpoint.wikisystem.service;
 
 import com.proofpoint.wikisystem.model.Team;
 import com.proofpoint.wikisystem.model.User;
+import com.proofpoint.wikisystem.payload.UpdateTeamArgs;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
@@ -42,11 +43,23 @@ public class TeamService {
         }
     }
 
-    public String delete(String teamId) {
+    public boolean delete(String teamId) {
         if (teams.containsKey(teamId)) {
             teams.remove(teamId);
-            return "Team deleted successfully";
+            return true;
         } else {
+            return false;
+        }
+    }
+
+    public String update(String teamId, UpdateTeamArgs updateArgs){
+        if(teams.containsKey(teamId)) {
+            Team team = teams.get(teamId);
+            if (!updateArgs.getIsAdmin().isEmpty()) {
+                team.setAdmin(Boolean.parseBoolean(updateArgs.getIsAdmin()));
+            }
+            return "Successfully updated team";
+        }else{
             return "Team not found";
         }
     }

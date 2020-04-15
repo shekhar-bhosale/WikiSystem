@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import static com.proofpoint.wikisystem.util.Constants.STATUS_FAILED_WITH_MESSAGE;
 import static com.proofpoint.wikisystem.util.Constants.STATUS_SUCCESS;
 
 @Slf4j
@@ -68,7 +69,7 @@ public class AccessController {
 
         } catch (final Exception e) {
             log.error(e.getMessage());
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(STATUS_FAILED_WITH_MESSAGE + e.getMessage(), HttpStatus.BAD_REQUEST);
         }
 
     }

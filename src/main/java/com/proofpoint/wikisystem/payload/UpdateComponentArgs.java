@@ -5,7 +5,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class UpdateAttachmentArgs {
+public class UpdateComponentArgs {
     private String contents;
     private String ownerId;
 }

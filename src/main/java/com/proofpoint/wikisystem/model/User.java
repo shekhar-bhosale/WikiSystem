@@ -26,6 +26,10 @@ public class User extends Collaborator {
         System.out.println("Creating User");
     }
 
+    public void read() {
+        System.out.println("Reading Page");
+    }
+
     public void delete() {
         System.out.println("Deleting User");
     }

@@ -1,6 +1,7 @@
 package com.proofpoint.wikisystem.service;
 
 import com.proofpoint.wikisystem.model.User;
+import com.proofpoint.wikisystem.payload.UpdateUserArgs;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
@@ -32,12 +33,24 @@ public class UserService {
         return users.getOrDefault(userID, null);
     }
 
-    public String delete(String userId) {
+    public String update(String teamId, UpdateUserArgs updateArgs){
+        if(users.containsKey(teamId)) {
+            User user = users.get(teamId);
+            if (!updateArgs.getUserName().isEmpty()) {
+                user.setUsername(updateArgs.getUserName());
+            }
+            return "Successfully updated user";
+        }else{
+            return "User not found";
+        }
+    }
+
+    public boolean delete(String userId) {
         if (users.containsKey(userId)) {
             users.remove(userId);
-            return "User deleted successfully";
+            return true;
         } else {
-            return "User not found";
+            return false;
         }
     }
 }
