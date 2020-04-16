@@ -1,7 +1,7 @@
 package com.proofpoint.wikisystem.controller;
 
 import com.proofpoint.wikisystem.model.Attachment;
-import com.proofpoint.wikisystem.payload.CreateAttachmentArgs;
+import com.proofpoint.wikisystem.payload.CreateAttachmentDto;
 import com.proofpoint.wikisystem.service.AttachmentService;
 import com.proofpoint.wikisystem.service.UserService;
 import org.junit.jupiter.api.BeforeEach;
@@ -66,16 +66,16 @@ public class AttachmentControllerTest {
 
     @Test
     final void testCreate() {
-        CreateAttachmentArgs createAttachmentArgs = new CreateAttachmentArgs();
-        createAttachmentArgs.setFilename(FILE_NAME);
-        createAttachmentArgs.setContents(FILE_CONTENT);
-        createAttachmentArgs.setOwnerId(USER_ID);
+        CreateAttachmentDto createAttachmentDto = new CreateAttachmentDto();
+        createAttachmentDto.setFilename(FILE_NAME);
+        createAttachmentDto.setContents(FILE_CONTENT);
+        createAttachmentDto.setOwnerId(USER_ID);
 
 
 
         when(userService.read(USER_ID)).thenReturn(OWNER);
 
-        ResponseEntity<String> response  = attachmentController.create(createAttachmentArgs);
+        ResponseEntity<String> response  = attachmentController.create(createAttachmentDto);
         assertNotNull(response);
         assertEquals(201, response.getStatusCode().value());
         assertEquals(STATUS_SUCCESS, response.getBody());
@@ -83,13 +83,13 @@ public class AttachmentControllerTest {
 
     @Test
     final void testCreateAttachment_FailedToReadUser() {
-        CreateAttachmentArgs createAttachmentArgs = new CreateAttachmentArgs();
-        createAttachmentArgs.setFilename(FILE_NAME);
-        createAttachmentArgs.setContents(FILE_CONTENT);
-        createAttachmentArgs.setOwnerId(USER_ID);
+        CreateAttachmentDto createAttachmentDto = new CreateAttachmentDto();
+        createAttachmentDto.setFilename(FILE_NAME);
+        createAttachmentDto.setContents(FILE_CONTENT);
+        createAttachmentDto.setOwnerId(USER_ID);
 
         when(userService.read(USER_ID)).thenThrow(new RuntimeException("Dummy Exception"));
-        ResponseEntity<String> response = attachmentController.create(createAttachmentArgs);
+        ResponseEntity<String> response = attachmentController.create(createAttachmentDto);
 
         assertEquals(400, response.getStatusCode().value());
         assertEquals("Operation FAILED Message:Dummy Exception", response.getBody());
@@ -97,14 +97,14 @@ public class AttachmentControllerTest {
 
     @Test
     final void testCreateAttachment_FailedToCreateAttachment() throws Exception {
-        CreateAttachmentArgs createAttachmentArgs = new CreateAttachmentArgs();
-        createAttachmentArgs.setFilename(FILE_NAME);
-        createAttachmentArgs.setContents(FILE_CONTENT);
-        createAttachmentArgs.setOwnerId(USER_ID);
+        CreateAttachmentDto createAttachmentDto = new CreateAttachmentDto();
+        createAttachmentDto.setFilename(FILE_NAME);
+        createAttachmentDto.setContents(FILE_CONTENT);
+        createAttachmentDto.setOwnerId(USER_ID);
 
         when(userService.read(USER_ID)).thenReturn(OWNER);
-        doThrow(new RuntimeException("Dummy Exception")).when(attachmentService).create(FILE_NAME, FILE_CONTENT, OWNER, createAttachmentArgs.getAccessMap());
-        ResponseEntity<String> response = attachmentController.create(createAttachmentArgs);
+        doThrow(new RuntimeException("Dummy Exception")).when(attachmentService).create(FILE_NAME, FILE_CONTENT, OWNER, createAttachmentDto.getAccessMap());
+        ResponseEntity<String> response = attachmentController.create(createAttachmentDto);
 
         assertEquals(400, response.getStatusCode().value());
         assertEquals("Operation FAILED Message:Dummy Exception", response.getBody());

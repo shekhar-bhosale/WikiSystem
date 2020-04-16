@@ -1,13 +1,19 @@
 package com.proofpoint.wikisystem.service;
 
 import com.proofpoint.wikisystem.model.*;
-import com.proofpoint.wikisystem.payload.UpdateComponentArgs;
+import com.proofpoint.wikisystem.payload.UpdateComponentDto;
+import com.proofpoint.wikisystem.util.Action;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import static com.proofpoint.wikisystem.util.Constants.authorizedActionsMap;
 
 @Service
 @Slf4j
@@ -62,35 +68,84 @@ public class PageService {
         return pages.getOrDefault(pageID, null);
     }
 
-    public String update(String pageId, UpdateComponentArgs updateArgs, String requesterId){
-        if(pages.containsKey(pageId)){
-            Page page = pages.get(pageId);
-            if(updateArgs.getContents()!=null){
-                page.setContent(updateArgs.getContents());
-            }
-
-            if(updateArgs.getOwnerId() != null){
-                if(isAuthorized(page, requesterId)){
-                    log.info("Transferring ownership of page");
-                    User owner = userService.read(updateArgs.getOwnerId());
-                    page.setOwner(owner);
+    public String update(String pageId, UpdateComponentDto updateArgs, String requesterId) {
+        if (isAuthorizedtoPerformAction(Action.UPDATE, pageId, requesterId, Boolean.parseBoolean(updateArgs.getIsIndividualUser()))){
+            if (pages.containsKey(pageId)) {
+                Page page = pages.get(pageId);
+                if (updateArgs.getContents() != null) {
+                    page.setContent(updateArgs.getContents());
                 }
+
+                if (updateArgs.getOwnerId() != null) {
+                    if (isRequesterisOwner(page, requesterId)) {
+                        log.info("Transferring ownership of page");
+                        User owner = userService.read(updateArgs.getOwnerId());
+                        page.setOwner(owner);
+                    }
+                }
+                return "Successfully updated page";
+            } else {
+                return "Page not found";
             }
-            return "Successfully updated page";
         }else{
-            return "Page not found";
+            return "Not authorized to perform action on given component";
+        }
+
+    }
+
+    public Page readPage(String pageID, String requesterId, boolean isIndividualUser) {
+        if (isAuthorizedtoPerformAction(Action.READ, pageID, requesterId, isIndividualUser)) {
+            return read(pageID);
+        } else {
+            return null;
         }
     }
 
-    private boolean isAuthorized(Page page, String requesterId){
+    private boolean isRequesterisOwner(Page page, String requesterId) {
         return page.getOwner().getUsername().equals(requesterId);
     }
 
-    public boolean delete(String pageID) {
-        if (pages.containsKey(pageID)) {
-            pages.remove(pageID);
+    private boolean isAuthorizedtoPerformAction(Action action, String pageID, String requesterId, boolean isIndividualUser) {
+
+        Page page = read(pageID);
+
+        if (isRequesterisOwner(page, requesterId)) {
             return true;
+        }
+
+        Collaborator collaborator;
+        if (isIndividualUser) {
+            collaborator = userService.read(requesterId);
         } else {
+            Team team = teamService.read(requesterId);
+            if (team.isAdmin()) {
+                return true;
+            }
+            collaborator = team;
+        }
+
+        List<AccessType> allowedAccessTypes = authorizedActionsMap.get(action);
+
+        Map<AccessType, List<Collaborator>> accessMap = page.getAccessMap();
+
+        for (AccessType allowedAccessType : allowedAccessTypes) {
+            if (accessMap.get(allowedAccessType).contains(collaborator)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    public boolean delete(String pageID, String requesterId, boolean isIndividualUser ) {
+        if (isAuthorizedtoPerformAction(Action.DELETE, pageID, requesterId, isIndividualUser)){
+            if (pages.containsKey(pageID)) {
+                pages.remove(pageID);
+                return true;
+            } else {
+                return false;
+            }
+        }else{
             return false;
         }
     }

@@ -5,7 +5,7 @@ import lombok.Setter;
 
 @Setter
 @Getter
-public class CreateTeamArgs {
+public class CreateTeamDto {
     private String teamId;
     private boolean isAdmin;
 

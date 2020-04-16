@@ -7,7 +7,7 @@ import java.util.Map;
 
 @Getter
 @Setter
-public class CreatePageArgs {
+public class CreatePageDto {
     private String pageId;
     private String parentPageId;
     private String ownerId;

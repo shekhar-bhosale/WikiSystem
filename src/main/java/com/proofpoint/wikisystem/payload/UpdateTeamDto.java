@@ -5,6 +5,6 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class UpdateTeamArgs {
+public class UpdateTeamDto {
     private String isAdmin;
 }

@@ -4,7 +4,7 @@ import com.proofpoint.wikisystem.exceptions.AccessDeniedException;
 import com.proofpoint.wikisystem.model.AccessType;
 import com.proofpoint.wikisystem.model.Collaborator;
 import com.proofpoint.wikisystem.model.Component;
-import com.proofpoint.wikisystem.payload.CreateAccessArgs;
+import com.proofpoint.wikisystem.payload.CreateAccessDto;
 import com.proofpoint.wikisystem.service.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,45 +26,12 @@ public class AccessController {
     @Autowired
     private AccessService accessService;
 
-    @Autowired
-    private PageService pageService;
-
-    @Autowired
-    private AttachmentService attachmentService;
-
-    @Autowired
-    private UserService userService;
-
-    @Autowired
-    private TeamService teamService;
-
     @RequestMapping(method = RequestMethod.POST, consumes = "application/json")
-    public ResponseEntity<String> create(@RequestBody final CreateAccessArgs payload) {
+    public ResponseEntity<String> create(@RequestBody final CreateAccessDto payload) {
 
         try {
             log.info("Received request to create access");
-            log.info("Payload received:" + payload.toString());
-
-            Component component;
-            Collaborator collaborator;
-
-            if (payload.isPage()) {
-                component = pageService.read(payload.getComponentId());
-            } else {
-                component = attachmentService.read(payload.getComponentId());
-            }
-
-            if (payload.isIndividualUser()) {
-                collaborator = userService.read(payload.getCollaboratorId());
-            } else {
-                collaborator = teamService.read(payload.getCollaboratorId());
-            }
-
-            if (component == null || collaborator == null) {
-                throw new AccessDeniedException("Given Entities does not exist in system.");
-            }
-
-            accessService.assignAccess(component, AccessType.valueOf(payload.getAccessType()), collaborator);
+            accessService.assignAccess(payload);
             return new ResponseEntity<>(STATUS_SUCCESS, HttpStatus.CREATED);
 
         } catch (final Exception e) {

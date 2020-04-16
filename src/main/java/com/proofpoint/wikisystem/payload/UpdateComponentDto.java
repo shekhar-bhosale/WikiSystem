@@ -5,7 +5,11 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class UpdateComponentArgs {
+public class UpdateComponentDto {
     private String contents;
     private String ownerId;
+    private String collaboratorId;
+    private String isPage;
+    private String isIndividualUser;
+    private String requesterId;
 }

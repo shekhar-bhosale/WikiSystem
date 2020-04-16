@@ -5,6 +5,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class UpdateUserDto {
-    private String userName;
+public class DeletePageDto {
+    private String requesterId;
+    private String isIndividualUser;
 }

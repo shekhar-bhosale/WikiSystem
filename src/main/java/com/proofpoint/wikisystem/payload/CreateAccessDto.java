@@ -5,7 +5,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class CreateAccessArgs {
+public class CreateAccessDto {
     private String componentId;
     private String accessType;
     private String collaboratorId;

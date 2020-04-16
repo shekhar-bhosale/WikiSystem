@@ -4,7 +4,7 @@ import com.proofpoint.wikisystem.model.AccessType;
 import com.proofpoint.wikisystem.model.Attachment;
 import com.proofpoint.wikisystem.model.Collaborator;
 import com.proofpoint.wikisystem.model.User;
-import com.proofpoint.wikisystem.payload.UpdateComponentArgs;
+import com.proofpoint.wikisystem.payload.UpdateComponentDto;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
@@ -66,7 +66,7 @@ public class AttachmentService {
         }
     }
 
-    public String update(String filename, UpdateComponentArgs updateArgs, String requesterId){
+    public String update(String filename, UpdateComponentDto updateArgs, String requesterId){
         if(attachments.containsKey(filename)){
             Attachment attachment = attachments.get(filename);
             if(updateArgs.getContents()!=null){

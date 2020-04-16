@@ -7,7 +7,7 @@ import java.util.Map;
 
 @Getter
 @Setter
-public class CreateAttachmentArgs {
+public class CreateAttachmentDto {
     private String filename;
     private String contents;
     private String ownerId;

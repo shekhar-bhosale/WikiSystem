@@ -1,8 +1,8 @@
 package com.proofpoint.wikisystem.controller;
 
 import com.proofpoint.wikisystem.model.Team;
-import com.proofpoint.wikisystem.payload.CreateTeamArgs;
-import com.proofpoint.wikisystem.payload.UpdateTeamArgs;
+import com.proofpoint.wikisystem.payload.CreateTeamDto;
+import com.proofpoint.wikisystem.payload.UpdateTeamDto;
 import com.proofpoint.wikisystem.service.TeamService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,7 +22,7 @@ public class TeamController {
     private TeamService teamService;
 
     @RequestMapping(method = RequestMethod.POST, consumes = "application/json")
-    public ResponseEntity<String> create(@RequestBody final CreateTeamArgs payload) {
+    public ResponseEntity<String> create(@RequestBody final CreateTeamDto payload) {
 
         try {
             log.info("Received request to create team");
@@ -50,7 +50,7 @@ public class TeamController {
     }
 
     @RequestMapping(method = RequestMethod.PUT, consumes = "application/json")
-    public ResponseEntity<String> update(@RequestParam final String teamId, @RequestBody final UpdateTeamArgs payload) {
+    public ResponseEntity<String> update(@RequestParam final String teamId, @RequestBody final UpdateTeamDto payload) {
         log.info("Received request to update team");
         String output = teamService.update(teamId, payload);
 

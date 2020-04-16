@@ -1,8 +1,8 @@
 package com.proofpoint.wikisystem.controller;
 
 import com.proofpoint.wikisystem.model.User;
-import com.proofpoint.wikisystem.payload.CreateUserArgs;
-import com.proofpoint.wikisystem.payload.UpdateUserArgs;
+import com.proofpoint.wikisystem.payload.CreateUserDto;
+import com.proofpoint.wikisystem.payload.UpdateUserDto;
 import com.proofpoint.wikisystem.service.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,7 +22,7 @@ public class UserController {
     private UserService userService;
 
     @RequestMapping(method = RequestMethod.POST, consumes = "application/json")
-    public ResponseEntity<String> create(@RequestBody final CreateUserArgs payload) {
+    public ResponseEntity<String> create(@RequestBody final CreateUserDto payload) {
 
         try {
             log.info("Received request to create user");
@@ -49,7 +49,7 @@ public class UserController {
     }
 
     @RequestMapping(method = RequestMethod.PUT, consumes = "application/json")
-    public ResponseEntity<String> update(@RequestParam final String userId, @RequestBody final UpdateUserArgs payload) {
+    public ResponseEntity<String> update(@RequestParam final String userId, @RequestBody final UpdateUserDto payload) {
         log.info("Received request to update user");
         String output = userService.update(userId, payload);
 

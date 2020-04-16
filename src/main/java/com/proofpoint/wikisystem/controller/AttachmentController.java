@@ -2,8 +2,8 @@ package com.proofpoint.wikisystem.controller;
 
 import com.proofpoint.wikisystem.model.Attachment;
 import com.proofpoint.wikisystem.model.User;
-import com.proofpoint.wikisystem.payload.CreateAttachmentArgs;
-import com.proofpoint.wikisystem.payload.UpdateComponentArgs;
+import com.proofpoint.wikisystem.payload.CreateAttachmentDto;
+import com.proofpoint.wikisystem.payload.UpdateComponentDto;
 import com.proofpoint.wikisystem.service.AttachmentService;
 import com.proofpoint.wikisystem.service.UserService;
 import lombok.extern.slf4j.Slf4j;
@@ -26,7 +26,7 @@ public class AttachmentController {
     private UserService userService;
 
     @RequestMapping(method = RequestMethod.POST, consumes = "application/json")
-    public ResponseEntity<String> create(@RequestBody final CreateAttachmentArgs payload) {
+    public ResponseEntity<String> create(@RequestBody final CreateAttachmentDto payload) {
 
         try {
             log.info("Received request to create attachment");
@@ -60,7 +60,7 @@ public class AttachmentController {
     }
 
     @RequestMapping(method = RequestMethod.PUT, consumes = "application/json")
-    public ResponseEntity<String> update(@RequestParam final String fileName, @RequestBody final UpdateComponentArgs payload, @RequestParam final String requesterId) {
+    public ResponseEntity<String> update(@RequestParam final String fileName, @RequestBody final UpdateComponentDto payload, @RequestParam final String requesterId) {
         log.info("Received request to update attachment");
         String output = attachmentService.update(fileName, payload, requesterId);
 

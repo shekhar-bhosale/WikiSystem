@@ -2,8 +2,9 @@ package com.proofpoint.wikisystem.controller;
 
 import com.proofpoint.wikisystem.model.Page;
 import com.proofpoint.wikisystem.model.User;
-import com.proofpoint.wikisystem.payload.CreatePageArgs;
-import com.proofpoint.wikisystem.payload.UpdateComponentArgs;
+import com.proofpoint.wikisystem.payload.CreatePageDto;
+import com.proofpoint.wikisystem.payload.DeletePageDto;
+import com.proofpoint.wikisystem.payload.UpdateComponentDto;
 import com.proofpoint.wikisystem.service.PageService;
 import com.proofpoint.wikisystem.service.UserService;
 import lombok.extern.slf4j.Slf4j;
@@ -27,7 +28,7 @@ public class PageController {
     private UserService userService;
 
     @RequestMapping(method = RequestMethod.POST, consumes = "application/json")
-    public ResponseEntity<String> create(@RequestBody final CreatePageArgs payload) {
+    public ResponseEntity<String> create(@RequestBody final CreatePageDto payload) {
 
         try {
             log.info("Received request to create page");
@@ -46,9 +47,9 @@ public class PageController {
     }
 
     @RequestMapping(method = RequestMethod.GET, produces = "application/json")
-    public ResponseEntity<Page> read(@RequestParam final String pageId) {
+    public ResponseEntity<Page> read(@RequestParam final String pageId, @RequestParam final String requesterId, @RequestParam final String isIndividualUser) {
         log.info("Received request to read page");
-        Page output = pageService.read(pageId);
+        Page output = pageService.readPage(pageId, requesterId, Boolean.parseBoolean(isIndividualUser));
 
         if (output != null) {
             return new ResponseEntity<>(output, HttpStatus.OK);
@@ -58,9 +59,9 @@ public class PageController {
     }
 
     @RequestMapping(method = RequestMethod.PUT, consumes = "application/json")
-    public ResponseEntity<String> update(@RequestParam final String pageId, @RequestBody final UpdateComponentArgs payload, @RequestParam final String requesterId) {
+    public ResponseEntity<String> update(@RequestParam final String pageId, @RequestBody final UpdateComponentDto payload) {
         log.info("Received request to update page");
-        String output = pageService.update(pageId, payload, requesterId);
+        String output = pageService.update(pageId, payload, payload.getRequesterId());
 
         ResponseEntity<String> response;
         if (output != null) {
@@ -73,12 +74,12 @@ public class PageController {
     }
 
     @RequestMapping(method = RequestMethod.DELETE, produces = "application/json")
-    public ResponseEntity<String> delete(@RequestParam final String pageId) {
+    public ResponseEntity<String> delete(@RequestParam final String pageId, @RequestBody final DeletePageDto payload) {
         log.info("Received request to delete page");
 
-        if (pageService.delete(pageId)){
+        if (pageService.delete(pageId, payload.getRequesterId(), Boolean.parseBoolean(payload.getIsIndividualUser()))) {
             return new ResponseEntity<>("Page deleted successfully", HttpStatus.OK);
-        }else{
+        } else {
             return new ResponseEntity<>("Page not found", HttpStatus.NOT_FOUND);
         }
 

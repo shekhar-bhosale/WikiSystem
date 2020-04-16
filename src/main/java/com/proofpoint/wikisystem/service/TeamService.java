@@ -2,7 +2,7 @@ package com.proofpoint.wikisystem.service;
 
 import com.proofpoint.wikisystem.model.Team;
 import com.proofpoint.wikisystem.model.User;
-import com.proofpoint.wikisystem.payload.UpdateTeamArgs;
+import com.proofpoint.wikisystem.payload.UpdateTeamDto;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
@@ -52,7 +52,7 @@ public class TeamService {
         }
     }
 
-    public String update(String teamId, UpdateTeamArgs updateArgs){
+    public String update(String teamId, UpdateTeamDto updateArgs){
         if(teams.containsKey(teamId)) {
             Team team = teams.get(teamId);
             if (!updateArgs.getIsAdmin().isEmpty()) {

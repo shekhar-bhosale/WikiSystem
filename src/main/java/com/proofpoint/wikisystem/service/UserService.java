@@ -1,7 +1,7 @@
 package com.proofpoint.wikisystem.service;
 
 import com.proofpoint.wikisystem.model.User;
-import com.proofpoint.wikisystem.payload.UpdateUserArgs;
+import com.proofpoint.wikisystem.payload.UpdateUserDto;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
@@ -33,7 +33,7 @@ public class UserService {
         return users.getOrDefault(userID, null);
     }
 
-    public String update(String teamId, UpdateUserArgs updateArgs){
+    public String update(String teamId, UpdateUserDto updateArgs){
         if(users.containsKey(teamId)) {
             User user = users.get(teamId);
             if (!updateArgs.getUserName().isEmpty()) {
