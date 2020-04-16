@@ -3,6 +3,7 @@ package com.proofpoint.wikisystem.controller;
 import com.proofpoint.wikisystem.model.Attachment;
 import com.proofpoint.wikisystem.model.User;
 import com.proofpoint.wikisystem.payload.CreateAttachmentDto;
+import com.proofpoint.wikisystem.payload.DeleteComponentDto;
 import com.proofpoint.wikisystem.payload.UpdateComponentDto;
 import com.proofpoint.wikisystem.service.AttachmentService;
 import com.proofpoint.wikisystem.service.UserService;
@@ -45,10 +46,10 @@ public class AttachmentController {
     }
 
     @RequestMapping(method = RequestMethod.GET, produces = "application/json")
-    public ResponseEntity<Attachment> read(@RequestParam final String fileName) {
+    public ResponseEntity<Attachment> read(@RequestParam final String fileName, @RequestParam final String requesterId, @RequestParam final String isIndividualUser) {
         log.info("Received request to read attachment");
 
-        final Attachment output = attachmentService.read(fileName);
+        final Attachment output = attachmentService.readAttachment(fileName, requesterId, Boolean.parseBoolean(isIndividualUser));
         ResponseEntity<Attachment> response;
         if (output != null) {
             response = new ResponseEntity<>(output, HttpStatus.OK);
@@ -75,12 +76,12 @@ public class AttachmentController {
     }
 
     @RequestMapping(method = RequestMethod.DELETE, produces = "application/json")
-    public ResponseEntity<String> delete(@RequestParam final String fileName) {
+    public ResponseEntity<String> delete(@RequestParam final String fileName, @RequestBody final DeleteComponentDto payload) {
 
         log.info("Received request to delete attachment");
 
         ResponseEntity<String> response;
-        if (attachmentService.delete(fileName)) {
+        if (attachmentService.delete(fileName, payload.getRequesterId(), Boolean.parseBoolean(payload.getIsIndividualUser()))) {
             response = new ResponseEntity<>("File deleted successfully", HttpStatus.OK);
         } else {
             response = new ResponseEntity<>("File not found", HttpStatus.NOT_FOUND);

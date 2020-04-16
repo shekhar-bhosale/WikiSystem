@@ -5,7 +5,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class DeletePageDto {
+public class DeleteComponentDto {
     private String requesterId;
     private String isIndividualUser;
 }

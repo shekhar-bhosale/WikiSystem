@@ -3,7 +3,7 @@ package com.proofpoint.wikisystem.controller;
 import com.proofpoint.wikisystem.model.Page;
 import com.proofpoint.wikisystem.model.User;
 import com.proofpoint.wikisystem.payload.CreatePageDto;
-import com.proofpoint.wikisystem.payload.DeletePageDto;
+import com.proofpoint.wikisystem.payload.DeleteComponentDto;
 import com.proofpoint.wikisystem.payload.UpdateComponentDto;
 import com.proofpoint.wikisystem.service.PageService;
 import com.proofpoint.wikisystem.service.UserService;
@@ -74,7 +74,7 @@ public class PageController {
     }
 
     @RequestMapping(method = RequestMethod.DELETE, produces = "application/json")
-    public ResponseEntity<String> delete(@RequestParam final String pageId, @RequestBody final DeletePageDto payload) {
+    public ResponseEntity<String> delete(@RequestParam final String pageId, @RequestBody final DeleteComponentDto payload) {
         log.info("Received request to delete page");
 
         if (pageService.delete(pageId, payload.getRequesterId(), Boolean.parseBoolean(payload.getIsIndividualUser()))) {

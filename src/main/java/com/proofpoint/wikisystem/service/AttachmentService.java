@@ -1,17 +1,18 @@
 package com.proofpoint.wikisystem.service;
 
-import com.proofpoint.wikisystem.model.AccessType;
-import com.proofpoint.wikisystem.model.Attachment;
-import com.proofpoint.wikisystem.model.Collaborator;
-import com.proofpoint.wikisystem.model.User;
+import com.proofpoint.wikisystem.model.*;
 import com.proofpoint.wikisystem.payload.UpdateComponentDto;
+import com.proofpoint.wikisystem.util.Action;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+
+import static com.proofpoint.wikisystem.util.Constants.authorizedActionsMap;
 
 @Service
 @Slf4j
@@ -66,36 +67,85 @@ public class AttachmentService {
         }
     }
 
-    public String update(String filename, UpdateComponentDto updateArgs, String requesterId){
-        if(attachments.containsKey(filename)){
-            Attachment attachment = attachments.get(filename);
-            if(updateArgs.getContents()!=null){
-                attachment.setContents(updateArgs.getContents());
-            }
-
-            if(updateArgs.getOwnerId() != null){
-                if(isAuthorized(attachment, requesterId)){
-                    log.info("Transferring ownership of file");
-                    User owner = userService.read(updateArgs.getOwnerId());
-                    attachment.setOwner(owner);
-                }
-            }
-            return "Successfully updated attachment";
+    public Attachment readAttachment(String filename, String requesterId, Boolean isIndividualUser) {
+        if (isAuthorizedtoPerformAction(Action.READ, filename, requesterId, isIndividualUser)) {
+            return read(filename);
         }else{
-            return "Attachment not found";
+            return null;
         }
     }
 
-    private boolean isAuthorized(Attachment attachment, String requesterId){
+    public String update(String filename, UpdateComponentDto updateArgs, String requesterId){
+        if (isAuthorizedtoPerformAction(Action.UPDATE, filename, requesterId, Boolean.parseBoolean(updateArgs.getIsIndividualUser()))) {
+            if(attachments.containsKey(filename)){
+                Attachment attachment = attachments.get(filename);
+                if(updateArgs.getContents()!=null){
+                    attachment.setContents(updateArgs.getContents());
+                }
+
+                if(updateArgs.getOwnerId() != null){
+                    if(isRequesterisOwner(attachment, requesterId)){
+                        log.info("Transferring ownership of file");
+                        User owner = userService.read(updateArgs.getOwnerId());
+                        attachment.setOwner(owner);
+                    }
+                }
+                return "Successfully updated attachment";
+            }else{
+                return "Attachment not found";
+            }
+        }else{
+            return "Not authorized to perform action on given component";
+        }
+    }
+
+    private boolean isRequesterisOwner(Attachment attachment, String requesterId){
         return attachment.getOwner().getUsername().equals(requesterId);
     }
 
-    public boolean delete(String filename) {
-        if (attachments.containsKey(filename)) {
-            attachments.remove(filename);
-            return true;
-        } else {
+    public boolean delete(String filename, String requesterId, Boolean isIndividualUser) {
+        if (isAuthorizedtoPerformAction(Action.DELETE, filename, requesterId, isIndividualUser)) {
+            if (attachments.containsKey(filename)) {
+                attachments.remove(filename);
+                return true;
+            } else {
+                return false;
+            }
+        }else{
             return false;
         }
     }
+
+    private boolean isAuthorizedtoPerformAction(Action action, String filename, String requesterId, boolean isIndividualUser) {
+
+        Attachment attachment = read(filename);
+
+        if (isRequesterisOwner(attachment, requesterId)) {
+            return true;
+        }
+
+        Collaborator collaborator;
+        if (isIndividualUser) {
+            collaborator = userService.read(requesterId);
+        } else {
+            Team team = teamService.read(requesterId);
+            if (team.isAdmin()) {
+                return true;
+            }
+            collaborator = team;
+        }
+
+        List<AccessType> allowedAccessTypes = authorizedActionsMap.get(action);
+
+        Map<AccessType, List<Collaborator>> accessMap = attachment.getAccessMap();
+
+        for (AccessType allowedAccessType : allowedAccessTypes) {
+            if (accessMap.get(allowedAccessType).contains(collaborator)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
 }
