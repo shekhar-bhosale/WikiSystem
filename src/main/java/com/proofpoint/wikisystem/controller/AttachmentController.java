@@ -50,6 +50,7 @@ public class AttachmentController {
         log.info("Received request to read attachment");
 
         final Attachment output = attachmentService.readAttachment(fileName, requesterId, Boolean.parseBoolean(isIndividualUser));
+        log.info("Attachment received from service:"+output.toString());
         ResponseEntity<Attachment> response;
         if (output != null) {
             response = new ResponseEntity<>(output, HttpStatus.OK);
@@ -60,7 +61,7 @@ public class AttachmentController {
         return response;
     }
 
-    @RequestMapping(method = RequestMethod.PUT, consumes = "application/json")
+    @RequestMapping(method = RequestMethod.PATCH, consumes = "application/json")
     public ResponseEntity<String> update(@RequestParam final String fileName, @RequestBody final UpdateComponentDto payload, @RequestParam final String requesterId) {
         log.info("Received request to update attachment");
         String output = attachmentService.update(fileName, payload, requesterId);

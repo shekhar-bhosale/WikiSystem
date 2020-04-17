@@ -9,17 +9,17 @@ public class CreateAccessDto {
     private String componentId;
     private String accessType;
     private String collaboratorId;
-    private boolean isPage;
-    private boolean isIndividualUser;
+    private String isPage;
+    private String isIndividualUser;
 
     @Override
     public String toString() {
-        return "CreateAccessArgs{" +
+        return "CreateAccessDto{" +
                 "componentId='" + componentId + '\'' +
-                ", accesstype='" + accessType + '\'' +
+                ", accessType='" + accessType + '\'' +
                 ", collaboratorId='" + collaboratorId + '\'' +
-                ", isPage=" + isPage +
-                ", isIndividualUser=" + isIndividualUser +
+                ", isPage='" + isPage + '\'' +
+                ", isIndividualUser='" + isIndividualUser + '\'' +
                 '}';
     }
 }

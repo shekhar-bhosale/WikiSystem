@@ -58,7 +58,7 @@ public class PageController {
         }
     }
 
-    @RequestMapping(method = RequestMethod.PUT, consumes = "application/json")
+    @RequestMapping(method = RequestMethod.PATCH, consumes = "application/json")
     public ResponseEntity<String> update(@RequestParam final String pageId, @RequestBody final UpdateComponentDto payload) {
         log.info("Received request to update page");
         String output = pageService.update(pageId, payload, payload.getRequesterId());

@@ -2,6 +2,7 @@ package com.proofpoint.wikisystem.controller;
 
 import com.proofpoint.wikisystem.model.Attachment;
 import com.proofpoint.wikisystem.payload.CreateAttachmentDto;
+import com.proofpoint.wikisystem.payload.UpdateComponentDto;
 import com.proofpoint.wikisystem.service.AttachmentService;
 import com.proofpoint.wikisystem.service.UserService;
 import org.junit.jupiter.api.BeforeEach;
@@ -35,29 +36,16 @@ public class AttachmentControllerTest {
     @Mock
     UserService userService;
 
-//    private MockMvc mvc;
-
-    /*private Attachment attachment;
-
-    private final static String FILE_NAME = "Sample.txt";
-    private final static String CONTENT = "Random data not important";
-    private final static String USERID = "User101";*/
-
     @BeforeEach
     void setup() throws Exception {
-//        mvc = MockMvcBuilders.standaloneSetup(attachment).build();
         MockitoAnnotations.initMocks(this);
     }
 
     @Test
     final void testRead() throws Exception {
 
-       /* mvc.perform(get("/attachment")
-                .param("fileName", "Sample.txt"))
-                .andExpect(status().isOk());*/
-
-        when(attachmentService.read(anyString())).thenReturn(ATTACHMENT);
-        ResponseEntity<Attachment> output = attachmentController.read(FILE_NAME);
+        when(attachmentService.readAttachment(FILE_NAME, REQUESTER_ID,true)).thenReturn(ATTACHMENT);
+        ResponseEntity<Attachment> output = attachmentController.read(FILE_NAME, REQUESTER_ID, "true");
         assertNotNull(output);
         assertEquals(200, output.getStatusCode().value());
         assertEquals("Sample.txt", Objects.requireNonNull(output.getBody()).getFilename());
@@ -108,6 +96,14 @@ public class AttachmentControllerTest {
 
         assertEquals(400, response.getStatusCode().value());
         assertEquals("Operation FAILED Message:Dummy Exception", response.getBody());
+    }
+
+    @Test
+    final void testUpdateAttachment(){
+        when(attachmentService.update(FILE_NAME, UPDATEATTACHDTO, REQUESTER_ID)).thenReturn("Successfully updated attachment");
+        ResponseEntity<String> output = attachmentController.update(FILE_NAME, UPDATEATTACHDTO, REQUESTER_ID);
+        assertNotNull(output);
+        assertEquals(200, output.getStatusCode().value());
     }
 
 }

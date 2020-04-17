@@ -69,7 +69,7 @@ public class PageService {
     }
 
     public String update(String pageId, UpdateComponentDto updateArgs, String requesterId) {
-        if (isAuthorizedtoPerformAction(Action.UPDATE, pageId, requesterId, Boolean.parseBoolean(updateArgs.getIsIndividualUser()))){
+        if (isAuthorizedtoPerformAction(Action.UPDATE, pageId, requesterId, Boolean.parseBoolean(updateArgs.getIsIndividualUser()))) {
             if (pages.containsKey(pageId)) {
                 Page page = pages.get(pageId);
                 if (updateArgs.getContents() != null) {
@@ -83,11 +83,12 @@ public class PageService {
                         page.setOwner(owner);
                     }
                 }
+                pages.put(pageId,page);
                 return "Successfully updated page";
             } else {
                 return "Page not found";
             }
-        }else{
+        } else {
             return "Not authorized to perform action on given component";
         }
 
@@ -95,18 +96,22 @@ public class PageService {
 
     public Page readPage(String pageID, String requesterId, boolean isIndividualUser) {
         if (isAuthorizedtoPerformAction(Action.READ, pageID, requesterId, isIndividualUser)) {
+            log.info("User is authorized to read");
             return read(pageID);
         } else {
+            log.info("User is not authorized to read");
             return null;
         }
     }
 
     private boolean isRequesterisOwner(Page page, String requesterId) {
-        return page.getOwner().getUsername().equals(requesterId);
+//        log.info("Checking if requester "+requesterId+" is owner:"+page.getOwner().getId());
+        return page.getOwner().getId().equals(requesterId);
     }
 
     private boolean isAuthorizedtoPerformAction(Action action, String pageID, String requesterId, boolean isIndividualUser) {
 
+        log.info("Checking if user is authorized to perform this action:" + action + "\t" + pageID + "\t" + requesterId + "\t" + isIndividualUser);
         Page page = read(pageID);
 
         if (isRequesterisOwner(page, requesterId)) {
@@ -129,23 +134,27 @@ public class PageService {
         Map<AccessType, List<Collaborator>> accessMap = page.getAccessMap();
 
         for (AccessType allowedAccessType : allowedAccessTypes) {
-            if (accessMap.get(allowedAccessType).contains(collaborator)) {
-                return true;
+            log.info(("Checking if User " + collaborator.getId() + " has access " + allowedAccessType));
+            List<Collaborator> collabList = accessMap.get(allowedAccessType);
+            if (collabList != null) {
+                if (collabList.contains(collaborator)) {
+                    return true;
+                }
             }
         }
 
         return false;
     }
 
-    public boolean delete(String pageID, String requesterId, boolean isIndividualUser ) {
-        if (isAuthorizedtoPerformAction(Action.DELETE, pageID, requesterId, isIndividualUser)){
+    public boolean delete(String pageID, String requesterId, boolean isIndividualUser) {
+        if (isAuthorizedtoPerformAction(Action.DELETE, pageID, requesterId, isIndividualUser)) {
             if (pages.containsKey(pageID)) {
                 pages.remove(pageID);
                 return true;
             } else {
                 return false;
             }
-        }else{
+        } else {
             return false;
         }
     }

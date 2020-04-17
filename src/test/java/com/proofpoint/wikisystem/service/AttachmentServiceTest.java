@@ -42,7 +42,7 @@ public class AttachmentServiceTest {
        Attachment attachment = Attachment.Builder
                                 .newInstance()
                                 .withFilename("Sample.txt")
-                                .withContents("Avsdvdsaadfcdfc")
+                                .withContents("Random content")
                                 .withOwner(user)
                                 .build();
 

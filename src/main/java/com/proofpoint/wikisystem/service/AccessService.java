@@ -37,13 +37,13 @@ public class AccessService {
         Component component;
         Collaborator collaborator;
 
-        if (createAccessDto.isPage()) {
+        if (Boolean.parseBoolean(createAccessDto.getIsPage())) {
             component = pageService.read(createAccessDto.getComponentId());
         } else {
             component = attachmentService.read(createAccessDto.getComponentId());
         }
 
-        if (createAccessDto.isIndividualUser()) {
+        if (Boolean.parseBoolean(createAccessDto.getIsIndividualUser())) {
             collaborator = userService.read(createAccessDto.getCollaboratorId());
         } else {
             collaborator = teamService.read(createAccessDto.getCollaboratorId());

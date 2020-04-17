@@ -30,15 +30,18 @@ public class UserService {
 
     public User read(String userID) {
         log.info("Checking if user "+userID+" exists in system.");
-        return users.getOrDefault(userID, null);
+        User user = users.getOrDefault(userID, null);
+        log.info("User found:"+user.toString());
+        return user;
     }
 
-    public String update(String teamId, UpdateUserDto updateArgs){
-        if(users.containsKey(teamId)) {
-            User user = users.get(teamId);
+    public String update(String userId, UpdateUserDto updateArgs){
+        if(users.containsKey(userId)) {
+            User user = users.get(userId);
             if (!updateArgs.getUserName().isEmpty()) {
                 user.setUsername(updateArgs.getUserName());
             }
+            users.put(userId, user);
             return "Successfully updated user";
         }else{
             return "User not found";

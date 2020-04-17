@@ -58,6 +58,7 @@ public class TeamService {
             if (!updateArgs.getIsAdmin().isEmpty()) {
                 team.setAdmin(Boolean.parseBoolean(updateArgs.getIsAdmin()));
             }
+            teams.put(teamId, team);
             return "Successfully updated team";
         }else{
             return "Team not found";

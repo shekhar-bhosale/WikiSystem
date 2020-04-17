@@ -38,14 +38,14 @@ public class AttachmentService {
                 .withOwner(owner)
                 .build();
 
-        if(accessMap!=null){
+        if (accessMap != null) {
             log.info("Assigning access rights to component");
-            for(String collaboratorId: accessMap.keySet()){
+            for (String collaboratorId : accessMap.keySet()) {
                 Collaborator collaborator;
                 collaborator = userService.read(collaboratorId);
-                if(collaborator==null){
+                if (collaborator == null) {
                     collaborator = teamService.read(collaboratorId);
-                    if(collaborator==null) {
+                    if (collaborator == null) {
                         log.error("User does not exist");
                         throw new Exception("Given user in access map does not exist");
                     }
@@ -60,7 +60,7 @@ public class AttachmentService {
     public Attachment read(String filename) {
         if (attachments.containsKey(filename)) {
             Attachment output = attachments.get(filename);
-            log.info("Attachment found:" + output.toString());
+//            log.info("Attachment found:" + output.toString());
             return output;
         } else {
             return null;
@@ -69,37 +69,41 @@ public class AttachmentService {
 
     public Attachment readAttachment(String filename, String requesterId, Boolean isIndividualUser) {
         if (isAuthorizedtoPerformAction(Action.READ, filename, requesterId, isIndividualUser)) {
-            return read(filename);
-        }else{
+            log.info("User " + requesterId + " is authorized to read this component.");
+            Attachment output = read(filename);
+            log.info("Attachment found:" + output.toString());
+            return output;
+        } else {
             return null;
         }
     }
 
-    public String update(String filename, UpdateComponentDto updateArgs, String requesterId){
+    public String update(String filename, UpdateComponentDto updateArgs, String requesterId) {
         if (isAuthorizedtoPerformAction(Action.UPDATE, filename, requesterId, Boolean.parseBoolean(updateArgs.getIsIndividualUser()))) {
-            if(attachments.containsKey(filename)){
+            if (attachments.containsKey(filename)) {
                 Attachment attachment = attachments.get(filename);
-                if(updateArgs.getContents()!=null){
+                if (updateArgs.getContents() != null) {
                     attachment.setContents(updateArgs.getContents());
                 }
 
-                if(updateArgs.getOwnerId() != null){
-                    if(isRequesterisOwner(attachment, requesterId)){
+                if (updateArgs.getOwnerId() != null) {
+                    if (isRequesterisOwner(attachment, requesterId)) {
                         log.info("Transferring ownership of file");
                         User owner = userService.read(updateArgs.getOwnerId());
                         attachment.setOwner(owner);
                     }
                 }
+                attachments.put(filename, attachment);
                 return "Successfully updated attachment";
-            }else{
+            } else {
                 return "Attachment not found";
             }
-        }else{
+        } else {
             return "Not authorized to perform action on given component";
         }
     }
 
-    private boolean isRequesterisOwner(Attachment attachment, String requesterId){
+    private boolean isRequesterisOwner(Attachment attachment, String requesterId) {
         return attachment.getOwner().getUsername().equals(requesterId);
     }
 
@@ -111,7 +115,7 @@ public class AttachmentService {
             } else {
                 return false;
             }
-        }else{
+        } else {
             return false;
         }
     }
@@ -140,8 +144,12 @@ public class AttachmentService {
         Map<AccessType, List<Collaborator>> accessMap = attachment.getAccessMap();
 
         for (AccessType allowedAccessType : allowedAccessTypes) {
-            if (accessMap.get(allowedAccessType).contains(collaborator)) {
-                return true;
+            log.info(("Checking if User " + collaborator.getId() + " has access " + allowedAccessType));
+            List<Collaborator> collabList = accessMap.get(allowedAccessType);
+            if (collabList != null) {
+                if (collabList.contains(collaborator)) {
+                    return true;
+                }
             }
         }
 

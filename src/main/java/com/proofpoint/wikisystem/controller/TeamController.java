@@ -49,7 +49,7 @@ public class TeamController {
         }
     }
 
-    @RequestMapping(method = RequestMethod.PUT, consumes = "application/json")
+    @RequestMapping(method = RequestMethod.PATCH, consumes = "application/json")
     public ResponseEntity<String> update(@RequestParam final String teamId, @RequestBody final UpdateTeamDto payload) {
         log.info("Received request to update team");
         String output = teamService.update(teamId, payload);

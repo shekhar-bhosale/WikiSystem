@@ -48,7 +48,7 @@ public class UserController {
         }
     }
 
-    @RequestMapping(method = RequestMethod.PUT, consumes = "application/json")
+    @RequestMapping(method = RequestMethod.PATCH, consumes = "application/json")
     public ResponseEntity<String> update(@RequestParam final String userId, @RequestBody final UpdateUserDto payload) {
         log.info("Received request to update user");
         String output = userService.update(userId, payload);
